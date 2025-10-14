@@ -51,7 +51,7 @@ ExpenseTracker/
 
 1. Clone this repository  
    ```bash
-   git clone https://github.com/yourusername/expense-tracker.git
+   git clone https://github.com/BirajDas27/Basic-Expense-Tracker.git
    cd expense-tracker
 
 ---
