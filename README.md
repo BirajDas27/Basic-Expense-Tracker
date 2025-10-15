@@ -56,15 +56,15 @@ ExpenseTracker/<br>
 
 ---
 
-## 📚 Packages
-
-Tabulate package - pip install tabulate
-
----
-
 ## 🧮 Run the program
 
 python expense_tracker.py
+
+---
+
+## 📚 Packages
+
+Tabulate package - pip install tabulate
 
 ---
 
@@ -79,13 +79,13 @@ python expense_tracker.py
 
 🌟 Example Output
 
-+--------+------------+---------------+----------+
-| Index  | Date       | Description   | Amount   |
-+--------+------------+---------------+----------+
-| 1      | 2023-01-02 | grocery       | 3000.0   |
-| 2      | 2023-01-05 | netflix       | 499.0    |
-| 3      | 2023-01-20 | travel        | 10000.0  |
-+--------+------------+---------------+----------+
++--------+------------+---------------+----------+<br>
+| Index  | Date       | Description   | Amount   |<br>
++--------+------------+---------------+----------+<br>
+| 1      | 2023-01-02 | grocery       | 3000.0   |<br>
+| 2      | 2023-01-05 | netflix       | 499.0    |<br>
+| 3      | 2023-01-20 | travel        | 10000.0  |<br>
++--------+------------+---------------+----------+<br>
 
 ---
 
