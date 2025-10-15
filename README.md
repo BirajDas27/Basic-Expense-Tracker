@@ -79,7 +79,7 @@ Tabulate package - pip install tabulate
 
 🌟 Example Output
 
-![](screenshots.table_example.png)
+![](screenshots/table_example.png)
 
 ---
 
