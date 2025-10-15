@@ -20,11 +20,11 @@ Perfect for beginners learning file handling and Python basics!
 
 ## 📂 Project Structure
 
-ExpenseTracker/\n
-│\n
-├── expense_tracker.py # Main program file\n
-├── expenses.csv # Stores all expense data\n
-└── README.md # Project documentation\n
+ExpenseTracker/<br>
+│<br>
+├── expense_tracker.py # Main program file<br>
+├── expenses.csv # Stores all expense data<br>
+└── README.md # Project documentation<br>
 
 ---
 
