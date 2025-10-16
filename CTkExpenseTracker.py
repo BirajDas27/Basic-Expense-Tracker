@@ -17,7 +17,7 @@ navbar.pack()
 
 my_label = ctk.CTkLabel(navbar,
     text = "Expense Tracker UI",
-    font = ("Helvenica", 25, "bold"),
+    font = ("Helvetica", 25, "bold"),
     text_color = "white",
     padx = 900,
     pady = 15
@@ -33,6 +33,6 @@ sidebar = ctk.CTkFrame(app,
     
     
 )
-sidebar.pack(padx = 15, pady = 15,side = 'left')
+sidebar.pack(padx = 15, pady = 15, side = 'left')
 
 app.mainloop()
