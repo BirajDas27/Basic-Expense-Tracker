@@ -28,11 +28,11 @@ my_label.pack()
 sidebar = ctk.CTkFrame(app,
     fg_color = 'red',
     width = 90,
-    corner_radius = 100,
+    corner_radius = 200,
     height = 480,
     
     
 )
-sidebar.pack(pady = 15)
+sidebar.pack(padx = 15, pady = 15,side = 'left')
 
 app.mainloop()
