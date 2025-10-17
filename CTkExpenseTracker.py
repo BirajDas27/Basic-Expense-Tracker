@@ -6,12 +6,13 @@ ctk.set_default_color_theme = "blue"
 app = ctk.CTk()
 
 app.title('Expense Tracker')
-app.geometry('900x600')
+app.geometry('800x500')
+app.configure(fg_color = "#260731")
 
 navbar = ctk.CTkFrame(app,
     width = 900,
-    height = 80,
-    fg_color = '#600080'
+    height = 200,
+    fg_color = '#993B9C'
 )
 navbar.pack()
 
@@ -26,13 +27,20 @@ my_label = ctk.CTkLabel(navbar,
 my_label.pack()
 
 sidebar = ctk.CTkFrame(app,
-    fg_color = 'red',
-    width = 90,
-    corner_radius = 200,
-    height = 480,
-    
-    
+    fg_color = '#683B9C',
+    width = 70,
+    corner_radius = 150,
+    height = 450,
 )
-sidebar.pack(padx = 15, pady = 15, side = 'left')
+sidebar.pack(padx = (15, 0), pady = (15, 20), side = 'left')
+
+main_container = ctk.CTkFrame(app,
+    border_width = 2,
+    border_color = "#CF48A9",
+    corner_radius = 15,
+    fg_color = "#937296",
+    height = 450
+)
+main_container.pack(padx = (15, 15), pady = (15, 20), fill = 'both')
 
 app.mainloop()
