@@ -30,7 +30,7 @@ my_label.pack()
 sidebar = ctk.CTkFrame(app,
     fg_color = '#52ab98',
     width = 60,
-    corner_radius = 20,
+    corner_radius = 30,
     height = 450,
     border_width = 1,
     border_color = "#87C3D4",
@@ -48,31 +48,31 @@ image_path = "screenshots/icons/wallet.png"
 my_image = Image.open(image_path)
 add_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/search.png"
 my_image = Image.open(image_path)
 view_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/changes.png"
 my_image = Image.open(image_path)
 update_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/trash.png"
 my_image = Image.open(image_path)
 remove_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/sum.png"
 my_image = Image.open(image_path)
 total_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/magnifier.png"
 my_image = Image.open(image_path)
 search_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/sort.png"
 my_image = Image.open(image_path)
 sort_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/"
+image_path = "screenshots/icons/calendar.png"
 my_image = Image.open(image_path)
 periodic_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
@@ -94,14 +94,14 @@ for opt in options:
     my_button = ctk.CTkButton(
         inner_sidebar,
         image=opt["image"],
-        text="",  # no text for image
+        text="",
         fg_color="transparent",
         bg_color="transparent",
         width=50,
         height=40,
         hover_color="#2b6777"
     )
-    my_button.pack()
+    my_button.pack(pady = 5)
     
 
 
