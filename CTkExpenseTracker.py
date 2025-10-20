@@ -9,6 +9,7 @@ app = ctk.CTk()
 app.title('Expense Tracker')
 app.geometry('800x500')
 app.configure(fg_color = "#BCDCE6")
+app.resizable(True, True)
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -18,7 +19,7 @@ navbar = ctk.CTkFrame(app,
 navbar.pack()
 
 my_label = ctk.CTkLabel(navbar,
-    text = "Expense Tracker UI",
+    text = "Expense Tracker",
     font = ("Helvetica", 25, "bold"),
     text_color = "white",
     padx = 900,
@@ -76,32 +77,134 @@ image_path = "screenshots/icons/calendar.png"
 my_image = Image.open(image_path)
 periodic_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-# Define button options (first one uses image)
-options = [
-    {"image": add_icon, "text": ""},
-    {"image": view_icon, "text": ""},
-    {"image": update_icon, "text": ""},
-    {"image": remove_icon, "text": ""},
-    {"image": total_icon, "text": ""},
-    {"image": search_icon, "text": ""},
-    {"image": sort_icon, "text": ""},
-    {"image": periodic_icon, "text": ""},
-]
+def add():
+    label.configure(text = 'add button pressed')
 
-# Create buttons
-for opt in options:
-    
-    my_button = ctk.CTkButton(
-        inner_sidebar,
-        image=opt["image"],
-        text="",
-        fg_color="transparent",
-        bg_color="transparent",
-        width=50,
-        height=40,
-        hover_color="#2b6777"
-    )
-    my_button.pack(pady = 5)
+
+add_button = ctk.CTkButton(
+    inner_sidebar,
+    image = add_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = add
+)
+add_button.pack(pady = 5)
+
+def view():
+    label.configure(text = 'view button pressed')
+
+view_button = ctk.CTkButton(
+    inner_sidebar,
+    image = view_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = view
+)
+view_button.pack(pady = 5)
+
+def update():
+    label.configure(text = 'update button pressed')
+
+update_button = ctk.CTkButton(
+    inner_sidebar,
+    image = update_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = update
+)
+update_button.pack(pady = 5)
+
+def remove():
+    label.configure(text = 'remove button pressed')
+
+remove_button = ctk.CTkButton(
+    inner_sidebar,
+    image = remove_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = remove
+)
+remove_button.pack(pady = 5)
+
+def total():
+    label.configure(text = 'total button pressed')
+
+total_button = ctk.CTkButton(
+    inner_sidebar,
+    image = total_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = total
+)
+total_button.pack(pady = 5)
+
+def search():
+    label.configure(text = 'search button pressed')
+
+search_button = ctk.CTkButton(
+    inner_sidebar,
+    image = search_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = search
+)
+search_button.pack(pady = 5)
+
+def sort():
+    label.configure(text = 'sort button pressed')
+
+sort_button = ctk.CTkButton(
+    inner_sidebar,
+    image = sort_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = sort
+)
+sort_button.pack(pady = 5)
+
+def periodic():
+    label.configure(text = 'periodic button pressed')
+
+periodic_button = ctk.CTkButton(
+    inner_sidebar,
+    image = periodic_icon,
+    text="",
+    fg_color="transparent",
+    bg_color="transparent",
+    width=50,
+    height=40,
+    hover_color="#2b6777",
+    command = periodic
+)
+periodic_button.pack(pady = 5)
     
 
 
@@ -110,8 +213,18 @@ main_container = ctk.CTkFrame(app,
     border_color = "#2b6777",
     corner_radius = 15,
     fg_color = "#f2f2f2",
-    height = 450
+    height = 600
 )
 main_container.pack(padx = (15, 15), pady = (15, 20), fill = 'both')
+main_container.pack_propagate(False)
+
+label = ctk.CTkLabel(
+    main_container,
+    text = '',
+    text_color = 'black'
+)
+label.pack()
+
+
 
 app.mainloop()
