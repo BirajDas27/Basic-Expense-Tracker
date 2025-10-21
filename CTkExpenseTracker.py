@@ -78,7 +78,7 @@ my_image = Image.open(image_path)
 periodic_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
 def add():
-    label.configure(text = 'add button pressed')
+    title.configure(text = 'add button pressed')
 
 
 add_button = ctk.CTkButton(
@@ -95,7 +95,7 @@ add_button = ctk.CTkButton(
 add_button.pack(pady = 5)
 
 def view():
-    label.configure(text = 'view button pressed')
+    title.configure(text = 'view button pressed')
 
 view_button = ctk.CTkButton(
     inner_sidebar,
@@ -111,7 +111,7 @@ view_button = ctk.CTkButton(
 view_button.pack(pady = 5)
 
 def update():
-    label.configure(text = 'update button pressed')
+    title.configure(text = 'update button pressed')
 
 update_button = ctk.CTkButton(
     inner_sidebar,
@@ -127,7 +127,7 @@ update_button = ctk.CTkButton(
 update_button.pack(pady = 5)
 
 def remove():
-    label.configure(text = 'remove button pressed')
+    title.configure(text = 'remove button pressed')
 
 remove_button = ctk.CTkButton(
     inner_sidebar,
@@ -143,7 +143,7 @@ remove_button = ctk.CTkButton(
 remove_button.pack(pady = 5)
 
 def total():
-    label.configure(text = 'total button pressed')
+    title.configure(text = 'total button pressed')
 
 total_button = ctk.CTkButton(
     inner_sidebar,
@@ -159,7 +159,7 @@ total_button = ctk.CTkButton(
 total_button.pack(pady = 5)
 
 def search():
-    label.configure(text = 'search button pressed')
+    title.configure(text = 'search button pressed')
 
 search_button = ctk.CTkButton(
     inner_sidebar,
@@ -175,7 +175,7 @@ search_button = ctk.CTkButton(
 search_button.pack(pady = 5)
 
 def sort():
-    label.configure(text = 'sort button pressed')
+    title.configure(text = 'sort button pressed')
 
 sort_button = ctk.CTkButton(
     inner_sidebar,
@@ -191,7 +191,7 @@ sort_button = ctk.CTkButton(
 sort_button.pack(pady = 5)
 
 def periodic():
-    label.configure(text = 'periodic button pressed')
+    title.configure(text = 'periodic button pressed')
 
 periodic_button = ctk.CTkButton(
     inner_sidebar,
@@ -218,12 +218,43 @@ main_container = ctk.CTkFrame(app,
 main_container.pack(padx = (15, 15), pady = (15, 20), fill = 'both')
 main_container.pack_propagate(False)
 
-label = ctk.CTkLabel(
+title_font = ctk.CTkFont(family = 'Helvetica', size = 27, weight = 'bold')
+title = ctk.CTkLabel(
     main_container,
-    text = '',
-    text_color = 'black'
+    text = 'Overview',
+    text_color = 'black',
+    font = title_font,
+    fg_color = '#82A4BA',
+    corner_radius = 15,
+    height = 50
 )
-label.pack()
+title.pack(padx = (0, 0), pady = (0, 0), anchor = 'center' , fill = 'both')
+
+container2 = ctk.CTkFrame(
+    main_container,
+    fg_color = '#C0DAF0',
+    corner_radius = 15,
+    border_width = 0,
+    height = 600
+
+)
+container2.pack(padx = 10, pady = 15, fill = 'both')
+container2.pack_propagate(False)
+
+description = ctk.CTkLabel(
+    container2,
+    text=(
+        "The Expense Tracker app helps you easily manage your daily finances by organizing expenses "
+        "into clear categories. You can add, edit, and view your spending patterns through a simple, "
+        "modern interface designed for clarity and efficiency. With intuitive controls and visual insights, "
+        "it enables you to stay on top of your budget and make smarter financial decisions."
+    ),
+    font = ('Helvetica', 14),
+    text_color = 'black',
+    wraplength = 650,
+    justify = 'center'
+)
+description.pack(padx = 5, pady = 15)
 
 
 
