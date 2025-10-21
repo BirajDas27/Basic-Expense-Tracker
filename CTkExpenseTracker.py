@@ -218,17 +218,49 @@ main_container = ctk.CTkFrame(app,
 main_container.pack(padx = (15, 15), pady = (15, 20), fill = 'both')
 main_container.pack_propagate(False)
 
-title_font = ctk.CTkFont(family = 'Helvetica', size = 27, weight = 'bold')
-title = ctk.CTkLabel(
+title_bar = ctk.CTkFrame(
     main_container,
-    text = 'Overview',
-    text_color = 'black',
-    font = title_font,
     fg_color = '#82A4BA',
-    corner_radius = 15,
     height = 50
 )
-title.pack(padx = (0, 0), pady = (0, 0), anchor = 'center' , fill = 'both')
+title_bar.pack(padx = (0, 0), pady = (0, 0), fill = 'both')
+title_bar.pack_propagate(False)
+
+title_bar.grid_columnconfigure(0, weight=1)
+title_bar.grid_columnconfigure(1, weight=2)
+title_bar.grid_columnconfigure(2, weight=1)
+
+hover_desc = ctk.CTkLabel(
+    title_bar,
+    text="",
+    corner_radius=5,
+    font=("Helvetica", 16),
+    text_color="white",
+    fg_color="transparent",
+    height=35,
+    width=120
+)
+hover_desc.grid(row=0, column=0, sticky="w", padx=15)
+
+title_font = ctk.CTkFont(family = 'Helvetica', size = 27, weight = 'bold')
+title = ctk.CTkLabel(
+    title_bar,
+    text="Overview",
+    text_color="black",
+    font=title_font,
+    fg_color="transparent",
+    height=45,
+    justify="center"
+)
+title.grid(row=0, column=1, sticky="nsew", padx = (35, 0))
+
+right_spacer = ctk.CTkLabel(
+    title_bar,
+    text="",
+    fg_color="transparent",
+    width=180
+)
+right_spacer.grid(row=0, column=2)
 
 container2 = ctk.CTkFrame(
     main_container,
@@ -255,6 +287,16 @@ description = ctk.CTkLabel(
     justify = 'center'
 )
 description.pack(padx = 5, pady = 15)
+
+feature_font = ctk.CTkFont(family = 'Helvetica', size = 20, weight = 'bold', underline = True)
+features = ctk.CTkLabel(
+    container2,
+    text = '      Features      ',
+    font = feature_font,
+    justify = 'center',
+    text_color = 'black'
+)
+features.pack(padx = (10, 5), pady = (0, 0))
 
 
 
