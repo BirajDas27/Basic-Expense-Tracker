@@ -77,9 +77,15 @@ image_path = "screenshots/icons/calendar.png"
 my_image = Image.open(image_path)
 periodic_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
+
+def add_on_enter(event):
+    hover_desc.configure(text = "Add expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def add_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
+
 def add():
     title.configure(text = 'add button pressed')
-
 
 add_button = ctk.CTkButton(
     inner_sidebar,
@@ -93,6 +99,14 @@ add_button = ctk.CTkButton(
     command = add
 )
 add_button.pack(pady = 5)
+add_button.bind("<Enter>", add_on_enter)
+add_button.bind("<Leave>", add_on_leave)
+
+def view_on_enter(event):
+    hover_desc.configure(text = "View expenses", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def view_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def view():
     title.configure(text = 'view button pressed')
@@ -109,6 +123,14 @@ view_button = ctk.CTkButton(
     command = view
 )
 view_button.pack(pady = 5)
+view_button.bind("<Enter>", view_on_enter)
+view_button.bind("<Leave>", view_on_leave)
+
+def update_on_enter(event):
+    hover_desc.configure(text = "Update expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def update_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def update():
     title.configure(text = 'update button pressed')
@@ -125,6 +147,15 @@ update_button = ctk.CTkButton(
     command = update
 )
 update_button.pack(pady = 5)
+update_button.bind("<Enter>", update_on_enter)
+update_button.bind("<Leave>", update_on_leave)
+
+
+def remove_on_enter(event):
+    hover_desc.configure(text = "Remove expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def remove_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def remove():
     title.configure(text = 'remove button pressed')
@@ -141,6 +172,15 @@ remove_button = ctk.CTkButton(
     command = remove
 )
 remove_button.pack(pady = 5)
+remove_button.bind("<Enter>", remove_on_enter)
+remove_button.bind("<Leave>", remove_on_leave)
+
+
+def total_on_enter(event):
+    hover_desc.configure(text = "Total expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def total_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def total():
     title.configure(text = 'total button pressed')
@@ -157,6 +197,15 @@ total_button = ctk.CTkButton(
     command = total
 )
 total_button.pack(pady = 5)
+total_button.bind("<Enter>", total_on_enter)
+total_button.bind("<Leave>", total_on_leave)
+
+
+def search_on_enter(event):
+    hover_desc.configure(text = "Search expenses", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def search_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def search():
     title.configure(text = 'search button pressed')
@@ -173,6 +222,15 @@ search_button = ctk.CTkButton(
     command = search
 )
 search_button.pack(pady = 5)
+search_button.bind("<Enter>", search_on_enter)
+search_button.bind("<Leave>", search_on_leave)
+
+
+def sort_on_enter(event):
+    hover_desc.configure(text = "Sort expenses", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def sort_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def sort():
     title.configure(text = 'sort button pressed')
@@ -189,6 +247,15 @@ sort_button = ctk.CTkButton(
     command = sort
 )
 sort_button.pack(pady = 5)
+sort_button.bind("<Enter>", sort_on_enter)
+sort_button.bind("<Leave>", sort_on_leave)
+
+
+def periodic_on_enter(event):
+    hover_desc.configure(text = "Periodic expenses", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+
+def periodic_on_leave(event):
+    hover_desc.configure(text = '', fg_color = 'transparent')
 
 def periodic():
     title.configure(text = 'periodic button pressed')
@@ -205,6 +272,8 @@ periodic_button = ctk.CTkButton(
     command = periodic
 )
 periodic_button.pack(pady = 5)
+periodic_button.bind("<Enter>", periodic_on_enter)
+periodic_button.bind("<Leave>", periodic_on_leave)
     
 
 
@@ -221,14 +290,10 @@ main_container.pack_propagate(False)
 title_bar = ctk.CTkFrame(
     main_container,
     fg_color = '#82A4BA',
-    height = 50
+    height = 45
 )
 title_bar.pack(padx = (0, 0), pady = (0, 0), fill = 'both')
 title_bar.pack_propagate(False)
-
-title_bar.grid_columnconfigure(0, weight=1)
-title_bar.grid_columnconfigure(1, weight=2)
-title_bar.grid_columnconfigure(2, weight=1)
 
 hover_desc = ctk.CTkLabel(
     title_bar,
@@ -237,12 +302,12 @@ hover_desc = ctk.CTkLabel(
     font=("Helvetica", 16),
     text_color="white",
     fg_color="transparent",
-    height=35,
+    height=40,
     width=120
 )
-hover_desc.grid(row=0, column=0, sticky="w", padx=15)
+hover_desc.pack(anchor = "w", padx = 15, pady = 5)
 
-title_font = ctk.CTkFont(family = 'Helvetica', size = 27, weight = 'bold')
+title_font = ctk.CTkFont(family = 'Helvetica', size = 23, weight = 'bold')
 title = ctk.CTkLabel(
     title_bar,
     text="Overview",
@@ -252,15 +317,7 @@ title = ctk.CTkLabel(
     height=45,
     justify="center"
 )
-title.grid(row=0, column=1, sticky="nsew", padx = (35, 0))
-
-right_spacer = ctk.CTkLabel(
-    title_bar,
-    text="",
-    fg_color="transparent",
-    width=180
-)
-right_spacer.grid(row=0, column=2)
+title.place(relx = 0.501, rely = 0.5, anchor = 'center')
 
 container2 = ctk.CTkFrame(
     main_container,
