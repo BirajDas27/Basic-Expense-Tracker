@@ -1,8 +1,10 @@
+import os
 import customtkinter as ctk
 from PIL import Image, ImageTk
 
 ctk.set_appearance_mode = "system"
-ctk.set_default_color_theme = "theme.json"
+theme_path = os.path.join(os.path.dirname(__file__), "theme.json")
+ctk.set_default_color_theme(theme_path)
 
 app = ctk.CTk()
 
@@ -10,6 +12,32 @@ app.title('Expense Tracker')
 app.geometry('890x590')
 app.configure(fg_color = "#BCDCE6")
 app.resizable(True, True)
+
+class Expense:
+    def __init__(self, date, description, amount):
+        self.date = date
+        self.description = description
+        self.amount = amount
+
+class ExpenseTracker:
+    def __init__(self):
+        self.expenses = []
+        self.msg = ''
+
+    def add_expense(self, expense):
+        if not os.path.exists('expenses.csv'):
+            with open('expenses.csv', 'w') as file:
+                file.write(f'1,{expense.date},{expense.description},{expense.amount}\n')
+            self.msg = 'File not found — created new file and added expense.'
+            return 
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            last_index = len(lines)
+        with open('expenses.csv', 'a') as file:
+            file.write(f'{last_index+1},{expense.date},{expense.description},{expense.amount}\n')
+        self.msg = 'Expense added successfully.'
+        return
+
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -78,6 +106,9 @@ my_image = Image.open(image_path)
 periodic_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
 
+tracker = ExpenseTracker()
+
+
 def add_on_enter(event):
     hover_desc.configure(text = "Add expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
 
@@ -93,7 +124,6 @@ def add():
     date_label = ctk.CTkLabel(
         container2,
         text = 'Enter date: ',
-        text_color = 'black'
     )
     date_label.grid(row = 0, column = 0)
     date_entry = ctk.CTkEntry(
@@ -106,7 +136,6 @@ def add():
     description_label = ctk.CTkLabel(
         container2,
         text = 'Enter category: ',
-        text_color = 'black',
     )
     description_label.grid(row = 1, column = 0)
     description_entry = ctk.CTkEntry(
@@ -119,7 +148,6 @@ def add():
     amount_label = ctk.CTkLabel(
         container2,
         text = 'Enter amount: ',
-        text_color = 'black',
     )
     amount_label.grid(row = 2, column = 0)
     amount_entry = ctk.CTkEntry(
@@ -128,6 +156,37 @@ def add():
         placeholder_text_color = 'grey'
     )
     amount_entry.grid(row = 2, column = 1)
+
+    def insertion():
+        try:
+            date = date_entry.get().strip()
+            description = description_entry.get().strip()
+            amount = float(amount_entry.get().strip())
+
+            expense = Expense(date, description, amount)
+            tracker.add_expense(expense)
+
+            notice.configure(text=tracker.msg, text_color='green')
+
+            date_entry.delete(0, 'end')
+            description_entry.delete(0, 'end')
+            amount_entry.delete(0, 'end')
+
+        except ValueError:
+            notice.configure(text='Please enter a valid amount!', text_color='red')
+
+    insert_button = ctk.CTkButton(
+        container2,
+        text = 'Add',
+        command = insertion
+    )
+    insert_button.grid(row = 3, column = 2)
+
+    notice = ctk.CTkLabel(
+        container2,
+        text = tracker.msg,
+    )
+    notice.grid(row = 4, column = 3)
 
 add_button = ctk.CTkButton(
     inner_sidebar,
@@ -391,7 +450,6 @@ description = ctk.CTkLabel(
         "it enables you to stay on top of your budget and make smarter financial decisions."
     ),
     font = ('Helvetica', 14),
-    text_color = 'black',
     wraplength = 650,
     justify = 'center'
 )
@@ -403,7 +461,6 @@ features = ctk.CTkLabel(
     text = '      Features      ',
     font = feature_font,
     justify = 'center',
-    text_color = 'black'
 )
 features.pack(padx = (10, 5), pady = (0, 0))
 
@@ -461,8 +518,6 @@ for i, (icon, text) in enumerate(zip(iconlist, labels)):
         feature1,
         image=icon,
         text="",
-        text_color="black",
-        fg_color="transparent",
         font=('Helvetica', 100, 'bold'),
         height=100,
         width=100
@@ -472,7 +527,6 @@ for i, (icon, text) in enumerate(zip(iconlist, labels)):
     text_label = ctk.CTkLabel(
         feature1,
         text=text,
-        text_color="black",
         font=("Helvetica", 15, 'bold')
     )
     text_label.grid(row=row + 1, column=col, pady=(0, 10))

@@ -15,7 +15,7 @@
   "CTkButton": {
     "corner_radius": 6,
     "border_width": 0,
-    "fg_color": ["#4DB3C8", "#2D6D7D"],
+    "fg_color": ["#4DB3C8", "red"],
     "hover_color": ["#4A9AB3", "#2B5B6D"],
     "border_color": ["#4D7A8D", "#9B9F9F"],
     "text_color": ["#E1F2F6", "#E1F2F6"],
@@ -24,7 +24,7 @@
   "CTkLabel": {
     "corner_radius": 0,
     "fg_color": "transparent",
-    "text_color": ["gray10", "#E1F2F6"]
+    "text_color": ["gray10", "black"]
   },
   "CTkEntry": {
     "corner_radius": 6,
