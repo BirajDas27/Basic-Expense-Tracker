@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image, ImageTk
 
 ctk.set_appearance_mode = "system"
-ctk.set_default_color_theme = "blue"
+ctk.set_default_color_theme = "theme.json"
 
 app = ctk.CTk()
 
@@ -85,7 +85,49 @@ def add_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def add():
-    title.configure(text = 'add button pressed')
+    title.configure(text = 'Add new expense')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    date_label = ctk.CTkLabel(
+        container2,
+        text = 'Enter date: ',
+        text_color = 'black'
+    )
+    date_label.grid(row = 0, column = 0)
+    date_entry = ctk.CTkEntry(
+        container2,
+        placeholder_text = 'YYYY-MM-DD',
+        placeholder_text_color = 'grey'
+    )
+    date_entry.grid(row = 0, column = 1)
+
+    description_label = ctk.CTkLabel(
+        container2,
+        text = 'Enter category: ',
+        text_color = 'black',
+    )
+    description_label.grid(row = 1, column = 0)
+    description_entry = ctk.CTkEntry(
+        container2,
+        placeholder_text = 'Eg grocery',
+        placeholder_text_color = 'grey'
+    )
+    description_entry.grid(row = 1, column = 1)
+
+    amount_label = ctk.CTkLabel(
+        container2,
+        text = 'Enter amount: ',
+        text_color = 'black',
+    )
+    amount_label.grid(row = 2, column = 0)
+    amount_entry = ctk.CTkEntry(
+        container2,
+        placeholder_text = 'xxxxx',
+        placeholder_text_color = 'grey'
+    )
+    amount_entry.grid(row = 2, column = 1)
 
 add_button = ctk.CTkButton(
     inner_sidebar,
@@ -109,7 +151,17 @@ def view_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def view():
-    title.configure(text = 'view button pressed')
+    title.configure(text = 'View all expenses')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    table = ctk.CTkScrollableFrame(
+        container2,
+        fg_color = 'red',
+        corner_radius = 15
+    )
+    table.pack(padx = 10, pady = 20, fill = 'both')
 
 view_button = ctk.CTkButton(
     inner_sidebar,
