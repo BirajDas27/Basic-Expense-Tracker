@@ -71,7 +71,7 @@ inner_sidebar = ctk.CTkFrame(sidebar,
     corner_radius = 20,
     width = 60
 )
-inner_sidebar.pack(padx = 2,pady = 40)
+inner_sidebar.pack(padx = 2,pady = 30)
 
 image_path = "screenshots/icons/wallet.png"
 my_image = Image.open(image_path)
@@ -121,72 +121,146 @@ def add():
     for widget in container2.winfo_children():
         widget.destroy()
 
+    form_frame = ctk.CTkFrame(container2, fg_color="transparent")
+    form_frame.pack(pady=(40, 10))
+
+    #Date
     date_label = ctk.CTkLabel(
-        container2,
-        text = 'Enter date: ',
+        form_frame, 
+        text="Enter date:", 
+        font = ("Helvetica", 13, 'bold')
     )
-    date_label.grid(row = 0, column = 0)
+    date_label.grid(row = 0, column = 0, padx = 10, pady = 10, sticky = 'e')
     date_entry = ctk.CTkEntry(
-        container2,
-        placeholder_text = 'YYYY-MM-DD',
-        placeholder_text_color = 'grey'
+        form_frame, 
+        placeholder_text="YYYY-MM-DD",
+        placeholder_text_color = 'black',
+        fg_color = '#82A4BA',
+        text_color = 'black',
+        width=200,
+        font = ('Helvetica', 13, 'bold')
     )
     date_entry.grid(row = 0, column = 1)
 
+    # Category
     description_label = ctk.CTkLabel(
-        container2,
-        text = 'Enter category: ',
+        form_frame, 
+        text="Enter category:", 
+        font = ("Helvetica", 13, 'bold')
     )
-    description_label.grid(row = 1, column = 0)
+    description_label.grid(row = 1, column = 0, padx = 10, pady = 10, sticky = 'e')
     description_entry = ctk.CTkEntry(
-        container2,
-        placeholder_text = 'Eg grocery',
-        placeholder_text_color = 'grey'
+        form_frame, 
+        placeholder_text="Eg grocery",
+        placeholder_text_color = 'black',
+        fg_color = '#82A4BA',
+        text_color = 'black',
+        width=200,
+        font = ('Helvetica', 14, 'bold')
     )
     description_entry.grid(row = 1, column = 1)
 
+    # Amount
     amount_label = ctk.CTkLabel(
-        container2,
-        text = 'Enter amount: ',
+        form_frame, 
+        text="Enter amount:", 
+        font = ("Helvetica", 14, 'bold')
     )
-    amount_label.grid(row = 2, column = 0)
+    amount_label.grid(row = 2, column = 0, padx = 10, pady = 10, sticky = 'e')
     amount_entry = ctk.CTkEntry(
-        container2,
-        placeholder_text = 'xxxxx',
-        placeholder_text_color = 'grey'
+        form_frame, 
+        placeholder_text="xxxxx",
+        placeholder_text_color = 'black',
+        fg_color = '#82A4BA',
+        text_color = 'black',
+        width=200,
+        font = ('Helvetica', 14, 'bold')
     )
     amount_entry.grid(row = 2, column = 1)
+
+    new_input = ctk.CTkFrame(
+        container2,
+        border_width=1,
+        corner_radius=5,
+        border_color="black",
+        fg_color='white'
+    )
 
     def insertion():
         try:
             date = date_entry.get().strip()
             description = description_entry.get().strip()
             amount = float(amount_entry.get().strip())
-
             expense = Expense(date, description, amount)
-            tracker.add_expense(expense)
-
-            notice.configure(text=tracker.msg, text_color='green')
-
-            date_entry.delete(0, 'end')
-            description_entry.delete(0, 'end')
+            tracker.add_expense(expense) 
+            notice.configure(
+                text=tracker.msg, 
+                text_color='green'
+            ) 
+            date_entry.delete(0, 'end') 
+            description_entry.delete(0, 'end') 
             amount_entry.delete(0, 'end')
 
-        except ValueError:
+            for widget in new_input.winfo_children():
+                widget.destroy()
+
+            new_input.pack(padx=100, pady=(0, 15), fill='x')            #defined outside to renew the new input with latest
+
+            date_label = ctk.CTkLabel(
+                new_input, 
+                text=date,
+                font=("Helvetica", 13), 
+                width=100, 
+                anchor='w',
+            )
+            date_label.grid(row=0, column=0, padx=(50, 10), pady=5, sticky='w')
+
+            desc_label = ctk.CTkLabel(
+                new_input, 
+                text=description,
+                font=("Helvetica", 13), 
+                width=200, 
+                anchor='w'
+            )
+            desc_label.grid(row=0, column=1, padx=10, pady=5, sticky='nesw')
+
+            amt_label = ctk.CTkLabel(
+                new_input, 
+                text = f"₹{amount:.2f}",
+                font=("Helvetica", 13, 'bold'), 
+                width=140, 
+                anchor='e'
+            )
+            amt_label.grid(row=0, column=2, padx=10, pady=5, sticky='e')
+        except ValueError: 
             notice.configure(text='Please enter a valid amount!', text_color='red')
 
     insert_button = ctk.CTkButton(
-        container2,
-        text = 'Add',
-        command = insertion
+        container2, 
+        text="ADD", 
+        font = ('Helvetica', 15, 'bold'),
+        height = 30,
+        width = 200,
+        command=insertion
     )
-    insert_button.grid(row = 3, column = 2)
+    insert_button.pack(pady=5)
 
     notice = ctk.CTkLabel(
-        container2,
-        text = tracker.msg,
+        container2, 
+        text="", 
+        text_color="green",
+        font = ('Helvetica', 14, 'bold')
     )
-    notice.grid(row = 4, column = 3)
+    notice.pack(pady=(10, 10))
+
+    footer = ctk.CTkFrame(
+        container2,
+        height = 5,
+        width = 300,
+        
+    )
+    footer.place(relx = 0.3, rely = 0.95)
+
 
 add_button = ctk.CTkButton(
     inner_sidebar,

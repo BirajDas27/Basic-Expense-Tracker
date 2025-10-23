@@ -8,14 +8,14 @@
   "CTkFrame": {
     "corner_radius": 6,
     "border_width": 0,
-    "fg_color": ["#B4D9E7", "#1E3A46"],
+    "fg_color": ["#B4D9E7", "#2b6777"],
     "top_fg_color": ["#A0C8D6", "#263F4F"],
     "border_color": ["#8AA1AE", "#2C4B5A"]
   },
   "CTkButton": {
     "corner_radius": 6,
     "border_width": 0,
-    "fg_color": ["#4DB3C8", "red"],
+    "fg_color": ["#4DB3C8", "#2b6777"],
     "hover_color": ["#4A9AB3", "#2B5B6D"],
     "border_color": ["#4D7A8D", "#9B9F9F"],
     "text_color": ["#E1F2F6", "#E1F2F6"],
