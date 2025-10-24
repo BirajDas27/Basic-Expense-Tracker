@@ -309,7 +309,7 @@ def view():
         def clear_csv():
             with open('expenses.csv', 'w') as file:
                 pass
-            notice1.configure(text = 'All expenses deleted successfully.', text_color = 'green')
+            notice1.configure(text = 'All expenses deleted successfully.', text_color = 'Red')
 
             for widget in container2.winfo_children():
                 if widget == notice1:
