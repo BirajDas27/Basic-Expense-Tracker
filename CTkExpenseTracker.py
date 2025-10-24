@@ -49,15 +49,9 @@ class ExpenseTracker:
             if len(lines) == 0:
                 self.msg = 'No expense found, your expense list is empty.'
                 return
-            self.msg = 'OK'
+            self.msg = 'Successfully extracted expenses.'
             return
-        #     data = []
-        #     for line in lines:
-        #         row = line.strip().split(',')
-        #         data.append(row)
-
-        # headers = ['Index', 'Date', 'Description', 'Amount']
-        # self.msg = tabulate(data, headers=headers, tablefmt='grid')
+            
 
 
 navbar = ctk.CTkFrame(app,
@@ -311,51 +305,99 @@ def view():
         widget.destroy()
 
     def viewing():
+
+        def clear_csv():
+            with open('expenses.csv', 'w') as file:
+                pass
+            notice1.configure(text = 'All expenses deleted successfully.', text_color = 'green')
+
+            for widget in container2.winfo_children():
+                if widget == notice1:
+                    pass
+                else:
+                    widget.destroy()
+            
+
         tracker.view_expense()
+        button.destroy()
         notice1.configure(
             text=tracker.msg,
-            text_color='green' if tracker.msg == 'OK' else 'red'
+            text_color='green' if tracker.msg == 'Successfully extracted expenses.' else 'red'
         )
 
+        del_button = ctk.CTkButton(
+            container2,
+            text = 'Delete all',
+            fg_color = 'red',
+            hover_color = '#9C2007',
+            font = ('Helvetica', 13, 'bold'),
+            command = clear_csv
+        )
+        del_button.place(x = 618, y = 10)
 
-            # header = ctk.CTkFrame(
-            #     container2,
-            #     height = 50,
-            #     fg_color = '#84B6D9'
-            # )
-            # header.pack(padx = 10, pady = (20, 0), fill = 'x')
+        if tracker.msg != 'Successfully extracted expenses.':
+            return
 
-            # headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
-            # for i, text in enumerate(headings):
-            #     ctk.CTkLabel(
-            #         header,
-            #         text=text,
-            #         justify='center',
-            #         text_color='black',
-            #         font=('Helvetica', 14, 'bold'),
-            #         fg_color='transparent'
-            #     ).grid(row=0, column=i, padx=60)
+        header = ctk.CTkFrame(
+            container2,
+            height = 55,
+            fg_color = '#84B6D9'
+        )
+        header.pack(padx = 10, pady = (5, 0), fill = 'x')
 
-            # view_frame = ctk.CTkScrollableFrame(
-            #     container2,
-            #     fg_color = 'white',
-            #     height =340
+        headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+        for i, text in enumerate(headings):
+            ctk.CTkLabel(
+                header,
+                text=text,
+                justify='center',
+                text_color='black',
+                font=('Helvetica', 14, 'bold'),
+                fg_color='transparent',
+            ).grid(row=0, column=i, padx=60)
+        view_frame = ctk.CTkScrollableFrame(
+            container2,
+            fg_color = 'white',
+            height =280
+        )
+        view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
 
-            # )
-            # view_frame.pack(padx = (10, 10), pady=(0, 10), fill = 'both')
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+
+        for line in lines:
+            row = line.strip().split(',')
+            ctk.CTkLabel(
+                view_frame,
+                text = row[0],
+                font = ('Helvetica', 13, 'bold')
+            ).grid(row = int(row[0]), column = 0, padx = (67, 60))
+            ctk.CTkLabel(
+                view_frame,
+                text = row[1],
+                font = ('Helvetica', 13, 'bold')
+            ).grid(row = int(row[0]), column = 1, padx = (63, 60))
+            ctk.CTkLabel(
+                view_frame,
+                text = row[2],
+                font = ('Helvetica', 13, 'bold')
+            ).grid(row = int(row[0]), column = 2, padx = (42, 60))
+            ctk.CTkLabel(
+                view_frame,
+                text = row[3],
+                font = ('Helvetica', 13, 'bold')
+            ).grid(row = int(row[0]), column = 3, padx = (62, 0))
             
-        #except ValueError: 
-            #notice1.configure(text='Something wrong', text_color='red')
 
     button = ctk.CTkButton(
         container2, 
-        text="click", 
+        text="Extract", 
         font = ('Helvetica', 15, 'bold'),
         height = 30,
-        width = 200,
+        width = 150,
         command=viewing
     )
-    button.pack(pady=5)
+    button.pack(pady=15)
 
     notice1 = ctk.CTkLabel(
         container2,
@@ -363,7 +405,7 @@ def view():
         text_color="green",
         font=('Helvetica', 14, 'bold')
     )
-    notice1.pack(pady=(10, 10))
+    notice1.pack(pady=(15, 0))
 
     footer = ctk.CTkFrame(
         container2,
