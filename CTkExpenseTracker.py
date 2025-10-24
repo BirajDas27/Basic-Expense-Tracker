@@ -38,6 +38,27 @@ class ExpenseTracker:
         self.msg = 'Expense added successfully.'
         return
 
+    def view_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+
+            if len(lines) == 0:
+                self.msg = 'No expense found, your expense list is empty.'
+                return
+            self.msg = 'OK'
+            return
+        #     data = []
+        #     for line in lines:
+        #         row = line.strip().split(',')
+        #         data.append(row)
+
+        # headers = ['Index', 'Date', 'Description', 'Amount']
+        # self.msg = tabulate(data, headers=headers, tablefmt='grid')
+
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -284,17 +305,72 @@ def view_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def view():
-    title.configure(text = 'View all expenses')
+    title.configure(text = 'View expenses')
 
     for widget in container2.winfo_children():
         widget.destroy()
 
-    table = ctk.CTkScrollableFrame(
-        container2,
-        fg_color = 'red',
-        corner_radius = 15
+    def viewing():
+        tracker.view_expense()
+        notice1.configure(
+            text=tracker.msg,
+            text_color='green' if tracker.msg == 'OK' else 'red'
+        )
+
+
+            # header = ctk.CTkFrame(
+            #     container2,
+            #     height = 50,
+            #     fg_color = '#84B6D9'
+            # )
+            # header.pack(padx = 10, pady = (20, 0), fill = 'x')
+
+            # headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+            # for i, text in enumerate(headings):
+            #     ctk.CTkLabel(
+            #         header,
+            #         text=text,
+            #         justify='center',
+            #         text_color='black',
+            #         font=('Helvetica', 14, 'bold'),
+            #         fg_color='transparent'
+            #     ).grid(row=0, column=i, padx=60)
+
+            # view_frame = ctk.CTkScrollableFrame(
+            #     container2,
+            #     fg_color = 'white',
+            #     height =340
+
+            # )
+            # view_frame.pack(padx = (10, 10), pady=(0, 10), fill = 'both')
+            
+        #except ValueError: 
+            #notice1.configure(text='Something wrong', text_color='red')
+
+    button = ctk.CTkButton(
+        container2, 
+        text="click", 
+        font = ('Helvetica', 15, 'bold'),
+        height = 30,
+        width = 200,
+        command=viewing
     )
-    table.pack(padx = 10, pady = 20, fill = 'both')
+    button.pack(pady=5)
+
+    notice1 = ctk.CTkLabel(
+        container2,
+        text="",
+        text_color="green",
+        font=('Helvetica', 14, 'bold')
+    )
+    notice1.pack(pady=(10, 10))
+
+    footer = ctk.CTkFrame(
+        container2,
+        height = 5,
+        width = 300,
+    )
+    footer.place(relx = 0.3, rely = 0.95)
 
 view_button = ctk.CTkButton(
     inner_sidebar,
