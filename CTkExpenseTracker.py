@@ -65,13 +65,49 @@ class ExpenseTracker:
 
             else:
                 self.msg = 'OK'
-                # date = input('Enter date in dd-mm-yyyy format: ')
-                # description = input('Enter category of expense: ')
-                # amount = float(input('Enter expense amount: '))
+                
+    def remove_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
 
-                # lines[i-1] = f'{i},{date},{description},{amount}\n'
-                # with open('expenses.csv', 'w') as file:
-                #     file.writelines(lines)
+        updated_list = []
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+
+        if len(lines) == 0:
+            self.msg = 'No expense found, your expense list is empty.'
+            return
+
+        else:
+            self.msg = 'OK'
+
+        # try:
+        #     i = int(idx.get())
+        # except ValueError:
+        #     self.msg = 'Invalid input. Please enter a number.'
+        #     return
+
+        # if 0 < i <= len(lines):
+        #     del lines[i - 1]
+        #     for i, line in enumerate(lines, start = 1):
+        #         if len(line.split(',')) == 4:
+        #             index, date, description, amount = line.split(',')
+        #         else:
+        #             date, description, amount = line.split(',')
+
+        #         if i == 1:
+        #             with open('expenses.csv', 'w') as file:
+        #                 new_lines = (f'{i},{date},{description},{amount}')
+        #                 file.writelines(new_lines)
+        #         else:
+        #             with open('expenses.csv', 'a') as file:
+        #                 new_lines = (f'{i},{date},{description},{amount}')
+        #                 file.write(new_lines)
+
+        #     self.msg = 'Expense removed successfully.'
+        # else:
+        #     self.msg = 'Index out of range.'
 
 
 navbar = ctk.CTkFrame(app,
@@ -459,7 +495,7 @@ def update_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def update():
-    title.configure(text = 'Update Expense')
+    title.configure(text = 'Update expense')
 
     for widget in container2.winfo_children():
         widget.destroy()
@@ -469,7 +505,7 @@ def update():
     notice = ctk.CTkLabel(
         container2,
         text = tracker.msg,
-        text_color="green" if tracker.msg == 'OK' else 'red',
+        text_color = 'red',
         font=('Helvetica', 14, 'bold')
 
     )
@@ -478,6 +514,15 @@ def update():
         notice.place_forget()
     else:
         notice.pack(pady = (15, 0))
+
+    if tracker.msg != 'OK':
+        footer = ctk.CTkFrame(
+            container2,
+            height = 5,
+            width = 300,
+        )
+        footer.place(relx = 0.3, rely = 0.95)
+        return
 
     header = ctk.CTkFrame(
             container2,
@@ -536,12 +581,16 @@ def update():
 
     ctk.CTkLabel(
         idx_frame,
-        text = 'Enter index to update expense: '
-    ).grid(row = 0, column = 0)
+        text = 'Enter index to update expense: ',
+        font = ('Helvetica', 13, 'bold')
+    ).grid(row = 0, column = 0, padx = (0, 5))
 
     idx_value = ctk.CTkEntry(
         idx_frame,
-
+        fg_color = '#87C3D4',
+        corner_radius = 5,
+        text_color = 'black',
+        font = ('Helvetica', 12, 'bold')
     )
     idx_value.grid(row = 0, column = 1)
 
@@ -566,39 +615,48 @@ def update():
             form_frame.pack(pady = (10, 0))
             date = ctk.CTkLabel(
                 form_frame,
-                text = 'Date',
+                text = 'Date:',
                 font = ('Helvetica', 12, 'bold')
             )
             date.grid(row = 0, column = 0, padx = (0, 10), sticky = 'e')
             date_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'YYYY-MM-DD',
+                fg_color = '#87C3D4',
+                corner_radius = 5,
+                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             date_entry.grid(row = 0, column = 1)
 
             description = ctk.CTkLabel(
                 form_frame,
-                text = 'Description',
+                text = 'Description:',
                 font = ('Helvetica', 12, 'bold')
             )
             description.grid(row = 1, column = 0, padx = (0, 10), sticky = 'e')
             desc_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'Eg travel',
+                fg_color = '#87C3D4',
+                corner_radius = 5,
+                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             desc_entry.grid(row = 1, column = 1)
 
             amount = ctk.CTkLabel(
                 form_frame,
-                text = 'Amount',
+                text = 'Amount:',
                 font = ('Helvetica', 12, 'bold')
             )
             amount.grid(row = 2, column = 0, padx = (0, 10), sticky = 'e')
             amt_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'xxxxx',
+                fg_color = '#87C3D4',
+                corner_radius = 5,
+                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             amt_entry.grid(row = 2, column = 1)
@@ -662,8 +720,6 @@ def update():
     )
     notice1.pack(pady = (10, 0))
 
-    
-
 update_button = ctk.CTkButton(
     inner_sidebar,
     image = update_icon,
@@ -687,7 +743,91 @@ def remove_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def remove():
-    title.configure(text = 'remove button pressed')
+    title.configure(text = 'Delete expense')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    tracker.remove_expense()
+
+    notice = ctk.CTkLabel(
+        container2,
+        text = tracker.msg,
+        text_color= 'red',
+        font=('Helvetica', 14, 'bold')
+
+    )
+
+    if tracker.msg == 'OK':
+        notice.place_forget()
+    else:
+        notice.pack(pady = (15, 0))
+
+    header = ctk.CTkFrame(
+            container2,
+            height = 55,
+            fg_color = '#84B6D9'
+        )
+    header.pack(padx = 10, pady = (10, 0), fill = 'x')
+
+    headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+    for i, text in enumerate(headings):
+        ctk.CTkLabel(
+            header,
+            text=text,
+            justify='center',
+            text_color='black',
+            font=('Helvetica', 14, 'bold'),
+            fg_color='transparent',
+        ).grid(row=0, column=i, padx=60)
+    view_frame = ctk.CTkScrollableFrame(
+        container2,
+        fg_color = 'white',
+        height =30
+    )
+    view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        row = line.strip().split(',')
+        ctk.CTkLabel(
+            view_frame,
+            text = row[0],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 0, padx = (67, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[1],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 1, padx = (63, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[2],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 2, padx = (42, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[3],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 3, padx = (62, 0))
+
+    # idx_frame = ctk.CTkFrame(
+    #     container2,
+    #     width = 500,
+    #     fg_color = 'transparent'
+    # )
+    # idx_frame.pack(pady = 10)
+
+    # ctk.CTkLabel(
+    #     idx_frame,
+    #     text = 'Enter index to update expense: '
+    # ).grid(row = 0, column = 0)
+
+    # idx_value = ctk.CTkEntry(
+    #     idx_frame,
+
+    # )
+    # idx_value.grid(row = 0, column = 1)
 
 remove_button = ctk.CTkButton(
     inner_sidebar,
