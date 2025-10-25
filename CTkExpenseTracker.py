@@ -763,6 +763,16 @@ def remove():
     else:
         notice.pack(pady = (15, 0))
 
+    if tracker.msg != 'OK':
+        footer = ctk.CTkFrame(
+            container2,
+            height = 5,
+            width = 300,
+        )
+        footer.place(relx = 0.3, rely = 0.95)
+        return
+
+
     header = ctk.CTkFrame(
             container2,
             height = 55,
