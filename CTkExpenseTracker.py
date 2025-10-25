@@ -52,6 +52,26 @@ class ExpenseTracker:
             self.msg = 'Successfully extracted expenses.'
             return
             
+    def update_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            if len(lines) == 0:
+                self.msg = 'No expense found, your expense list is empty.'
+                return
+
+            else:
+                self.msg = 'OK'
+                # date = input('Enter date in dd-mm-yyyy format: ')
+                # description = input('Enter category of expense: ')
+                # amount = float(input('Enter expense amount: '))
+
+                # lines[i-1] = f'{i},{date},{description},{amount}\n'
+                # with open('expenses.csv', 'w') as file:
+                #     file.writelines(lines)
 
 
 navbar = ctk.CTkFrame(app,
@@ -305,35 +325,39 @@ def view():
         widget.destroy()
 
     def viewing():
-
         def clear_csv():
             with open('expenses.csv', 'w') as file:
                 pass
-            notice1.configure(text = 'All expenses deleted successfully.', text_color = 'Red')
+            notice.configure(text = 'All expenses deleted successfully.', text_color = 'Red')
 
             for widget in container2.winfo_children():
-                if widget == notice1:
-                    pass
+                if widget == notice:
+                    continue
                 else:
                     widget.destroy()
-            
 
         tracker.view_expense()
         button.destroy()
-        notice1.configure(
+
+        notice.configure(
             text=tracker.msg,
             text_color='green' if tracker.msg == 'Successfully extracted expenses.' else 'red'
         )
 
         del_button = ctk.CTkButton(
             container2,
-            text = 'Delete all',
-            fg_color = 'red',
-            hover_color = '#9C2007',
-            font = ('Helvetica', 13, 'bold'),
-            command = clear_csv
+            text='Delete all',
+            fg_color='red',
+            hover_color='#9C2007',
+            font=('Helvetica', 13, 'bold'),
+            command=clear_csv
         )
-        del_button.place(x = 618, y = 10)
+
+        if tracker.msg == 'Successfully extracted expenses.':
+            del_button.place(x=618, y=10)
+        else:
+            del_button.place_forget()
+            return
 
         if tracker.msg != 'Successfully extracted expenses.':
             return
@@ -388,7 +412,6 @@ def view():
                 font = ('Helvetica', 13, 'bold')
             ).grid(row = int(row[0]), column = 3, padx = (62, 0))
             
-
     button = ctk.CTkButton(
         container2, 
         text="Extract", 
@@ -399,13 +422,13 @@ def view():
     )
     button.pack(pady=15)
 
-    notice1 = ctk.CTkLabel(
+    notice = ctk.CTkLabel(
         container2,
         text="",
         text_color="green",
         font=('Helvetica', 14, 'bold')
     )
-    notice1.pack(pady=(15, 0))
+    notice.pack(pady=(15, 0))
 
     footer = ctk.CTkFrame(
         container2,
@@ -436,7 +459,210 @@ def update_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def update():
-    title.configure(text = 'update button pressed')
+    title.configure(text = 'Update Expense')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    tracker.update_expense()
+
+    notice = ctk.CTkLabel(
+        container2,
+        text = tracker.msg,
+        text_color="green" if tracker.msg == 'OK' else 'red',
+        font=('Helvetica', 14, 'bold')
+
+    )
+
+    if tracker.msg == 'OK':
+        notice.place_forget()
+    else:
+        notice.pack(pady = (15, 0))
+
+    header = ctk.CTkFrame(
+            container2,
+            height = 55,
+            fg_color = '#84B6D9'
+        )
+    header.pack(padx = 10, pady = (10, 0), fill = 'x')
+
+    headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+    for i, text in enumerate(headings):
+        ctk.CTkLabel(
+            header,
+            text=text,
+            justify='center',
+            text_color='black',
+            font=('Helvetica', 14, 'bold'),
+            fg_color='transparent',
+        ).grid(row=0, column=i, padx=60)
+    view_frame = ctk.CTkScrollableFrame(
+        container2,
+        fg_color = 'white',
+        height =30
+    )
+    view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        row = line.strip().split(',')
+        ctk.CTkLabel(
+            view_frame,
+            text = row[0],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 0, padx = (67, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[1],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 1, padx = (63, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[2],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 2, padx = (42, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[3],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 3, padx = (62, 0))
+
+    idx_frame = ctk.CTkFrame(
+        container2,
+        width = 500,
+        fg_color = 'transparent'
+    )
+    idx_frame.pack(pady = 10)
+
+    ctk.CTkLabel(
+        idx_frame,
+        text = 'Enter index to update expense: '
+    ).grid(row = 0, column = 0)
+
+    idx_value = ctk.CTkEntry(
+        idx_frame,
+
+    )
+    idx_value.grid(row = 0, column = 1)
+
+    def call():
+        try:
+            i = int(idx_value.get())
+        except ValueError:
+            notice1.configure(text='Please enter a numeric index.', text_color='red')
+            return
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+
+        if 0 < i <= len(lines):
+            notice1.configure(text = 'Found your expense!', text_color = 'green')
+            idx_frame.destroy()
+            idx_button.destroy()
+            form_frame = ctk.CTkFrame(
+                container2,
+                fg_color = 'transparent'
+            )
+            form_frame.pack(pady = (10, 0))
+            date = ctk.CTkLabel(
+                form_frame,
+                text = 'Date',
+                font = ('Helvetica', 12, 'bold')
+            )
+            date.grid(row = 0, column = 0, padx = (0, 10), sticky = 'e')
+            date_entry = ctk.CTkEntry(
+                form_frame,
+                placeholder_text = 'YYYY-MM-DD',
+                font = ('Helvetica', 12, 'bold')
+            )
+            date_entry.grid(row = 0, column = 1)
+
+            description = ctk.CTkLabel(
+                form_frame,
+                text = 'Description',
+                font = ('Helvetica', 12, 'bold')
+            )
+            description.grid(row = 1, column = 0, padx = (0, 10), sticky = 'e')
+            desc_entry = ctk.CTkEntry(
+                form_frame,
+                placeholder_text = 'Eg travel',
+                font = ('Helvetica', 12, 'bold')
+            )
+            desc_entry.grid(row = 1, column = 1)
+
+            amount = ctk.CTkLabel(
+                form_frame,
+                text = 'Amount',
+                font = ('Helvetica', 12, 'bold')
+            )
+            amount.grid(row = 2, column = 0, padx = (0, 10), sticky = 'e')
+            amt_entry = ctk.CTkEntry(
+                form_frame,
+                placeholder_text = 'xxxxx',
+                font = ('Helvetica', 12, 'bold')
+            )
+            amt_entry.grid(row = 2, column = 1)
+
+            def submit_update():
+                try:
+                    date = date_entry.get()
+                    description = desc_entry.get()
+                    amount = float(amt_entry.get())
+
+                    lines[i-1] = f'{i},{date},{description},{amount}\n'
+                    with open('expenses.csv', 'w') as file:
+                        file.writelines(lines)
+                    notice1.configure(text = 'Your expense is successfully edited', text_color = 'green')
+
+                except ValueError:
+                    notice1.configure(text = 'Invalid inputs', text_color = 'red')
+
+            buttons = ctk.CTkFrame(
+                container2,
+                fg_color = 'transparent'
+            )
+            buttons.pack(pady = 5)
+
+            submit_button = ctk.CTkButton(
+                buttons,
+                text = 'SUBMIT',
+                font = ('Helvetica', 12, 'bold'),
+                command = submit_update
+            )
+            submit_button.grid(row = 0, column = 0)
+
+            image_path = "screenshots/icons/refresh.png"
+            my_image = Image.open(image_path)
+            refresh_icon = ctk.CTkImage(light_image=my_image, size=(15, 15))
+
+            refresh_button = ctk.CTkButton(
+                buttons,
+                text = '',
+                image = refresh_icon,
+                width = 10,
+                command = update
+            )
+            refresh_button.grid(row = 0, column = 1, padx = (5, 0))
+        
+        else:
+            notice1.configure(text = 'Invalid indexing', text_color = 'red')
+
+    idx_button = ctk.CTkButton(
+        container2,
+        text = 'SUBMIT',
+        command = call,
+         font = ('Helvetica', 12, 'bold')
+    )
+    idx_button.pack(pady = 10)
+
+    notice1 = ctk.CTkLabel(
+        container2,
+        text = '',
+        font = ("Helvetica", 13, 'bold')
+    )
+    notice1.pack(pady = (10, 0))
+
+    
 
 update_button = ctk.CTkButton(
     inner_sidebar,
