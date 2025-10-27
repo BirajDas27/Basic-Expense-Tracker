@@ -132,9 +132,9 @@ image_path = "screenshots/icons/trash.png"
 my_image = Image.open(image_path)
 remove_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
-image_path = "screenshots/icons/sum.png"
-my_image = Image.open(image_path)
-total_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
+# image_path = "screenshots/icons/sum.png"
+# my_image = Image.open(image_path)
+# total_icon = ctk.CTkImage(light_image=my_image, size=(20, 20))
 
 image_path = "screenshots/icons/magnifier.png"
 my_image = Image.open(image_path)
@@ -337,6 +337,7 @@ def view():
         widget.destroy()
 
     def viewing():
+        total_amount = 0
         def clear_csv():
             with open('expenses.csv', 'w') as file:
                 pass
@@ -394,7 +395,7 @@ def view():
         view_frame = ctk.CTkScrollableFrame(
             container2,
             fg_color = 'white',
-            height =280
+            height =250
         )
         view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
 
@@ -403,6 +404,7 @@ def view():
 
         for line in lines:
             row = line.strip().split(',')
+            total_amount += float(row[3])
             ctk.CTkLabel(
                 view_frame,
                 text = row[0],
@@ -423,6 +425,27 @@ def view():
                 text = row[3],
                 font = ('Helvetica', 13, 'bold')
             ).grid(row = int(row[0]), column = 3, padx = (62, 0))
+
+        total = ctk.CTkFrame(
+            container2,
+            fg_color = 'transparent'
+        )
+        total.pack(pady = 5, anchor = 'e')
+        total_label = ctk.CTkLabel(
+            total,
+            text = 'Total expenditure',
+            text_color = 'black',
+            font = ('Helvetica', 15, 'bold'),
+
+        )
+        total_label.grid(row = 0, column = 0)
+        total_amt = ctk.CTkLabel(
+            total,
+            text = f'₹ {total_amount:.2f}',
+            font = ('Helvetica', 15, 'bold'),
+            text_color = 'green'
+        )
+        total_amt.grid(row = 0, column = 1, padx = (20, 10))
             
     button = ctk.CTkButton(
         container2, 
@@ -897,29 +920,32 @@ remove_button.bind("<Enter>", remove_on_enter)
 remove_button.bind("<Leave>", remove_on_leave)
 
 
-def total_on_enter(event):
-    hover_desc.configure(text = "Total expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
+# def total_on_enter(event):
+#     hover_desc.configure(text = "Total expense", fg_color = "#2b6777", text_color = "white", font = ("Helvetica", 17, 'bold'))
 
-def total_on_leave(event):
-    hover_desc.configure(text = '', fg_color = 'transparent')
+# def total_on_leave(event):
+#     hover_desc.configure(text = '', fg_color = 'transparent')
 
-def total():
-    title.configure(text = 'total button pressed')
+# def total():
+#     title.configure(text = 'Total expense')
 
-total_button = ctk.CTkButton(
-    inner_sidebar,
-    image = total_icon,
-    text="",
-    fg_color="transparent",
-    bg_color="transparent",
-    width=50,
-    height=40,
-    hover_color="#2b6777",
-    command = total
-)
-total_button.pack(pady = 7)
-total_button.bind("<Enter>", total_on_enter)
-total_button.bind("<Leave>", total_on_leave)
+#     for widget in container2.winfo_children():
+#         widget.destroy()
+
+# total_button = ctk.CTkButton(
+#     inner_sidebar,
+#     image = total_icon,
+#     text="",
+#     fg_color="transparent",
+#     bg_color="transparent",
+#     width=50,
+#     height=40,
+#     hover_color="#2b6777",
+#     command = total
+# )
+# total_button.pack(pady = 7)
+# total_button.bind("<Enter>", total_on_enter)
+# total_button.bind("<Leave>", total_on_leave)
 
 
 def search_on_enter(event):
