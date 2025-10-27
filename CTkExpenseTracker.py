@@ -82,6 +82,35 @@ class ExpenseTracker:
         else:
             self.msg = 'OK'
 
+    def search_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            if len(lines) == 0:
+                self.msg = 'No expense found, your expense list is empty.'
+                return
+            else:
+                self.msg = 'OK'
+                # search_key = input('\nEnter description to search: ').strip().lower()
+                # for line in lines:
+                #     parts = line.strip().split(',')
+                #     idx, date, desc, amount = parts
+                #     if search_key in desc.lower():
+                #         data.append([idx, date, desc, amount])
+                #         amt = float(amount)
+                #         total += amt
+
+                # if data:
+                #     print(f"\nExpenses matching '{search_key}':")
+                #     headers = ['Index', 'Date', 'Description', 'Amount']
+                #     print(tabulate(data, headers=headers, tablefmt='grid'))
+                #     print(f'Total expenditure for {search_key}: {total}')
+                # else:
+                #     print(f"\nNo expenses found matching '{search_key}'.")
+
 navbar = ctk.CTkFrame(app,
     width = 900,
     height = 200,
@@ -103,7 +132,7 @@ sidebar = ctk.CTkFrame(app,
     fg_color = '#52ab98',
     width = 60,
     corner_radius = 15,
-    height = 630,
+    height = 700,
     border_width = 1,
     border_color = "#87C3D4",
 )
@@ -112,7 +141,8 @@ sidebar.pack(padx = (15, 0), pady = (15, 20), side = 'left')
 inner_sidebar = ctk.CTkFrame(sidebar,
     fg_color = 'transparent',
     corner_radius = 20,
-    width = 60
+    width = 60,
+    height = 600
 )
 inner_sidebar.pack(padx = 2,pady = 30)
 
@@ -181,11 +211,8 @@ def add():
     date_entry = ctk.CTkEntry(
         form_frame, 
         placeholder_text="YYYY-MM-DD",
-        placeholder_text_color = 'black',
-        fg_color = '#82A4BA',
-        text_color = 'black',
-        width=200,
-        font = ('Helvetica', 13, 'bold')
+        width = 200,
+        font = ('Helvetica', 12, 'bold')
     )
     date_entry.grid(row = 0, column = 1)
 
@@ -199,11 +226,8 @@ def add():
     description_entry = ctk.CTkEntry(
         form_frame, 
         placeholder_text="Eg grocery",
-        placeholder_text_color = 'black',
-        fg_color = '#82A4BA',
-        text_color = 'black',
         width=200,
-        font = ('Helvetica', 14, 'bold')
+        font = ('Helvetica', 12, 'bold')
     )
     description_entry.grid(row = 1, column = 1)
 
@@ -211,17 +235,14 @@ def add():
     amount_label = ctk.CTkLabel(
         form_frame, 
         text="Enter amount:", 
-        font = ("Helvetica", 14, 'bold')
+        font = ("Helvetica", 13, 'bold')
     )
     amount_label.grid(row = 2, column = 0, padx = 10, pady = 10, sticky = 'e')
     amount_entry = ctk.CTkEntry(
         form_frame, 
         placeholder_text="xxxxx",
-        placeholder_text_color = 'black',
-        fg_color = '#82A4BA',
-        text_color = 'black',
         width=200,
-        font = ('Helvetica', 14, 'bold')
+        font = ('Helvetica', 12, 'bold')
     )
     amount_entry.grid(row = 2, column = 1)
 
@@ -236,7 +257,7 @@ def add():
     def insertion():
         try:
             date = date_entry.get().strip()
-            description = description_entry.get().strip()
+            description = description_entry.get().strip().lower()
             amount = float(amount_entry.get().strip())
             expense = Expense(date, description, amount)
             tracker.add_expense(expense) 
@@ -320,7 +341,7 @@ add_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = add
 )
-add_button.pack(pady = 7)
+add_button.pack(pady = 12)
 add_button.bind("<Enter>", add_on_enter)
 add_button.bind("<Leave>", add_on_leave)
 
@@ -483,7 +504,7 @@ view_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = view
 )
-view_button.pack(pady = 7)
+view_button.pack(pady = 12)
 view_button.bind("<Enter>", view_on_enter)
 view_button.bind("<Leave>", view_on_leave)
 
@@ -586,9 +607,6 @@ def update():
 
     idx_value = ctk.CTkEntry(
         idx_frame,
-        fg_color = '#87C3D4',
-        corner_radius = 5,
-        text_color = 'black',
         font = ('Helvetica', 12, 'bold')
     )
     idx_value.grid(row = 0, column = 1)
@@ -615,15 +633,12 @@ def update():
             date = ctk.CTkLabel(
                 form_frame,
                 text = 'Date:',
-                font = ('Helvetica', 12, 'bold')
+                font = ('Helvetica', 13, 'bold')
             )
             date.grid(row = 0, column = 0, padx = (0, 10), sticky = 'e')
             date_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'YYYY-MM-DD',
-                fg_color = '#87C3D4',
-                corner_radius = 5,
-                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             date_entry.grid(row = 0, column = 1)
@@ -631,15 +646,12 @@ def update():
             description = ctk.CTkLabel(
                 form_frame,
                 text = 'Description:',
-                font = ('Helvetica', 12, 'bold')
+                font = ('Helvetica', 13, 'bold')
             )
             description.grid(row = 1, column = 0, padx = (0, 10), sticky = 'e')
             desc_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'Eg travel',
-                fg_color = '#87C3D4',
-                corner_radius = 5,
-                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             desc_entry.grid(row = 1, column = 1)
@@ -647,15 +659,12 @@ def update():
             amount = ctk.CTkLabel(
                 form_frame,
                 text = 'Amount:',
-                font = ('Helvetica', 12, 'bold')
+                font = ('Helvetica', 13, 'bold')
             )
             amount.grid(row = 2, column = 0, padx = (0, 10), sticky = 'e')
             amt_entry = ctk.CTkEntry(
                 form_frame,
                 placeholder_text = 'xxxxx',
-                fg_color = '#87C3D4',
-                corner_radius = 5,
-                text_color = 'black',
                 font = ('Helvetica', 12, 'bold')
             )
             amt_entry.grid(row = 2, column = 1)
@@ -726,7 +735,7 @@ update_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = update
 )
-update_button.pack(pady = 7)
+update_button.pack(pady = 12)
 update_button.bind("<Enter>", update_on_enter)
 update_button.bind("<Leave>", update_on_leave)
 
@@ -852,14 +861,11 @@ def remove():
     ctk.CTkLabel(
         idx_frame,
         text = 'Enter index to remove expense:',
-        font = ('Helvetica', 12, 'bold')
+        font = ('Helvetica', 13, 'bold')
     ).grid(row = 0, column = 0, padx = (0, 5))
 
     idx_value = ctk.CTkEntry(
         idx_frame,
-        fg_color = '#87C3D4',
-        corner_radius = 5,
-        text_color = 'black',
         font = ('Helvetica', 12, 'bold')
     )
     idx_value.grid(row = 0, column = 1)
@@ -915,7 +921,7 @@ remove_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = remove
 )
-remove_button.pack(pady = 7)
+remove_button.pack(pady = 12)
 remove_button.bind("<Enter>", remove_on_enter)
 remove_button.bind("<Leave>", remove_on_leave)
 
@@ -955,7 +961,235 @@ def search_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def search():
-    title.configure(text = 'search button pressed')
+    title.configure(text = 'Search category')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    tracker.search_expense()
+
+    notice = ctk.CTkLabel(
+        container2,
+        text = tracker.msg,
+        text_color= 'red',
+        font=('Helvetica', 14, 'bold')
+    )
+
+    if tracker.msg == 'OK':
+        notice.place_forget()
+    else:
+        notice.pack(pady = (15, 0))
+
+    if tracker.msg != 'OK':
+        footer = ctk.CTkFrame(
+            container2,
+            height = 5,
+            width = 300,
+        )
+        footer.place(relx = 0.3, rely = 0.95)
+        return
+
+    categories = []
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+    
+    for line in lines:
+        row = line.strip().split(',')
+        if row[2] not in categories:
+            categories.append(row[2])
+        else:
+            continue
+
+    table = ctk.CTkFrame(
+        container2,
+        width = 800,
+        fg_color = 'transparent'
+    )
+    table.pack(pady = 2, anchor = 'w')
+
+    header = ctk.CTkFrame(
+        table,
+        height=55,
+        fg_color='#84B6D9'
+    )
+    header.pack(padx=10, pady=(10, 0), fill='x', expand = True)
+
+    headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+    for i, text in enumerate(headings):
+        ctk.CTkLabel(
+            header,
+            text=text,
+            justify='center',
+            text_color='black',
+            font=('Helvetica', 14, 'bold'),
+            fg_color='transparent',
+        ).grid(row=0, column=i, sticky='nsew', pady=5)
+
+    for i in range(4):
+        header.grid_columnconfigure(i, weight=1, uniform='col')
+
+    view_frame = ctk.CTkScrollableFrame(
+        table,
+        fg_color='white',
+        height=150,
+        width = 550
+    )
+    view_frame.pack(padx=10, pady=(0, 5), fill='x', expand = True)
+
+    for i in range(4):
+        view_frame.grid_columnconfigure(i, weight=1, uniform='col')
+
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+
+    for idx, line in enumerate(lines):
+        row = line.strip().split(',')
+        for j, value in enumerate(row):
+            ctk.CTkLabel(
+                view_frame,
+                text=value,
+                font=('Helvetica', 13, 'bold'),
+                justify='center'
+            ).grid(row=idx, column=j, sticky='nsew', pady=2, padx = 30)
+
+    def show_table(category=None):
+        if not category:  # Empty field
+            notice1.configure(text='Please enter a category to search.')
+            total_label.configure(text = '')
+            total_amt.configure(text = '')
+            return
+
+        elif category not in [c.lower() for c in categories]:  # Invalid input
+            notice1.configure(text=f'"{category}" not found in your expense list.')
+            total_label.configure(text = '')
+            total_amt.configure(text = '')
+            return
+
+        else:
+            notice1.configure(text='')
+
+        for widget in table.winfo_children():
+            widget.destroy()
+
+        header = ctk.CTkFrame(
+            table,
+            height=55,
+            fg_color='#84B6D9'
+        )
+        header.pack(padx=10, pady=(10, 0), fill='x')
+
+        headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+        for i, text in enumerate(headings):
+            ctk.CTkLabel(
+                header,
+                text=text,
+                justify='center',
+                text_color='black',
+                font=('Helvetica', 14, 'bold'),
+                fg_color='transparent',
+            ).grid(row=0, column=i, sticky='nsew', pady=5)
+
+        for i in range(4):
+            header.grid_columnconfigure(i, weight=1, uniform='col')
+
+        view_frame = ctk.CTkScrollableFrame(
+            table,
+            fg_color='white',
+            height=150,
+            width = 550
+        )
+        view_frame.pack(padx=10, pady=(0, 5), fill='both')
+
+        for i in range(4):
+            view_frame.grid_columnconfigure(i, weight=1, uniform='col')
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+
+        filtered_lines = []
+        total_cost = 0
+        for line in lines:
+            row = line.strip().split(',')
+            if category is None or row[2] == category:
+                filtered_lines.append(row)
+                total_cost += float(row[3])
+
+        for idx, row in enumerate(filtered_lines):
+            for j, value in enumerate(row):
+                ctk.CTkLabel(
+                    view_frame,
+                    text=value,
+                    font=('Helvetica', 13, 'bold'),
+                    justify='center'
+                ).grid(row=idx, column=j, sticky='nsew', pady=2)
+
+        total_label.configure(text = f'Total spent:')
+        total_amt.configure(text = f'₹ {total_cost}')
+
+    scroll_area = ctk.CTkScrollableFrame(container2, width = 130,  height=390, fg_color='white')
+    scroll_area.place(relx=0.78, rely=0.03)
+
+    for button in categories:
+        ctk.CTkButton(
+            scroll_area,
+            text = button,
+            font = ('Helvetica', 13, 'bold'),
+            command = lambda b=button: show_table(b)
+        ).pack(padx = 0, pady = 5, expand = True)
+
+    container3 = ctk.CTkFrame(
+        container2,
+        fg_color = 'transparent'
+    )
+    container3.pack(pady = 5, anchor = 'w')
+
+    search_category = ctk.CTkFrame(container3, fg_color = 'transparent')
+    search_category.grid(padx = 5, pady = 5, sticky = 'w', row = 0, column = 0)
+
+    search_entry = ctk.CTkEntry(
+        search_category, 
+        placeholder_text = 'Eg grocery', 
+        font = ('Helvetica', 12, 'bold'), 
+        width = 200
+    )
+    search_entry.grid(row = 0, column = 0, padx = 5)
+    search_button = ctk.CTkButton(
+        search_category, 
+        text = 'SEARCH', 
+        command = lambda: show_table(search_entry.get().strip().lower()), 
+        width = 80, 
+        font = ('Helvetica', 12, 'bold')
+    )
+    search_button.grid(row = 0, column = 1)
+
+    total = ctk.CTkFrame(
+        container3,
+        fg_color = 'transparent'
+    )
+    total.grid(padx = (130, 0), pady = 5, sticky = 'w', row = 0, column = 1)
+
+    total_label = ctk.CTkLabel(
+        total,
+        text = '',
+        font = ('Helvetica', 13, 'bold')
+    )
+    total_label.grid(row = 0, column = 0, padx = (0, 10))
+    total_amt = ctk.CTkLabel(
+        total,
+        text = '',
+        text_color = 'green',
+        font = ('Helvetica', 13, 'bold')
+    )
+    total_amt.grid(row = 0, column = 1)
+
+
+    notice1 = ctk.CTkLabel(
+        container2,
+        text = '',
+        text_color = 'red',
+        font = ('Helvetica', 13, 'bold')
+    )
+    notice1.pack(padx = 10,pady = 5, anchor = 'w')
 
 search_button = ctk.CTkButton(
     inner_sidebar,
@@ -968,7 +1202,7 @@ search_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = search
 )
-search_button.pack(pady = 7)
+search_button.pack(pady = 12)
 search_button.bind("<Enter>", search_on_enter)
 search_button.bind("<Leave>", search_on_leave)
 
@@ -993,7 +1227,7 @@ sort_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = sort
 )
-sort_button.pack(pady = 7)
+sort_button.pack(pady = 12)
 sort_button.bind("<Enter>", sort_on_enter)
 sort_button.bind("<Leave>", sort_on_leave)
 
@@ -1018,7 +1252,7 @@ periodic_button = ctk.CTkButton(
     hover_color="#2b6777",
     command = periodic
 )
-periodic_button.pack(pady = 7)
+periodic_button.pack(pady = 12)
 periodic_button.bind("<Enter>", periodic_on_enter)
 periodic_button.bind("<Leave>", periodic_on_leave)
     
