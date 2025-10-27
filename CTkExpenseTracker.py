@@ -94,22 +94,34 @@ class ExpenseTracker:
                 return
             else:
                 self.msg = 'OK'
-                # search_key = input('\nEnter description to search: ').strip().lower()
+                
+    def sort_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
+
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            if len(lines) == 0:
+                self.msg = 'No expense found, your expense list is empty.'
+                return
+            else:
+                self.msg = 'OK'
+                # sorted = []
                 # for line in lines:
                 #     parts = line.strip().split(',')
-                #     idx, date, desc, amount = parts
-                #     if search_key in desc.lower():
-                #         data.append([idx, date, desc, amount])
-                #         amt = float(amount)
-                #         total += amt
+                #     idx, date, description, amount = parts
+                #     sorted.append([int(idx), date, description, float(amount)])
+                    
+                # opt = input('\nSort the amount(asce/desc): ').lower().strip()
+                # reverse = True if opt == 'desc' else False
+                # sorted.sort(key = lambda x: x[3], reverse = reverse)
 
-                # if data:
-                #     print(f"\nExpenses matching '{search_key}':")
-                #     headers = ['Index', 'Date', 'Description', 'Amount']
-                #     print(tabulate(data, headers=headers, tablefmt='grid'))
-                #     print(f'Total expenditure for {search_key}: {total}')
-                # else:
-                #     print(f"\nNo expenses found matching '{search_key}'.")
+                # for i, row in enumerate(sorted, start = 1):
+                #     row[0] = i
+
+                # headers = ['Index', 'date', 'description', 'Amount']
+                # print(tabulate(sorted, headers = headers, tablefmt = 'grid'))
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -1053,13 +1065,13 @@ def search():
             ).grid(row=idx, column=j, sticky='nsew', pady=2, padx = 30)
 
     def show_table(category=None):
-        if not category:  # Empty field
+        if not category:
             notice1.configure(text='Please enter a category to search.')
             total_label.configure(text = '')
             total_amt.configure(text = '')
             return
 
-        elif category not in [c.lower() for c in categories]:  # Invalid input
+        elif category not in categories:
             notice1.configure(text=f'"{category}" not found in your expense list.')
             total_label.configure(text = '')
             total_amt.configure(text = '')
@@ -1214,7 +1226,125 @@ def sort_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def sort():
-    title.configure(text = 'sort button pressed')
+    title.configure(text = 'Sort expense')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    tracker.sort_expense()
+
+    notice = ctk.CTkLabel(
+        container2,
+        text = tracker.msg,
+        text_color= 'red',
+        font=('Helvetica', 14, 'bold')
+    )
+
+    if tracker.msg == 'OK':
+        notice.place_forget()
+    else:
+        notice.pack(pady = (15, 0))
+
+    if tracker.msg != 'OK':
+        footer = ctk.CTkFrame(
+            container2,
+            height = 5,
+            width = 300,
+        )
+        footer.place(relx = 0.3, rely = 0.95)
+        return
+
+    header = ctk.CTkFrame(
+            container2,
+            height = 55,
+            fg_color = '#84B6D9'
+        )
+    header.pack(padx = 10, pady = (20, 0), fill = 'x')
+
+    headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+    for i, text in enumerate(headings):
+        ctk.CTkLabel(
+            header,
+            text=text,
+            justify='center',
+            text_color='black',
+            font=('Helvetica', 14, 'bold'),
+            fg_color='transparent',
+        ).grid(row=0, column=i, padx=60)
+    view_frame = ctk.CTkScrollableFrame(
+        container2,
+        fg_color = 'white',
+        height =30
+    )
+    view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        row = line.strip().split(',')
+        ctk.CTkLabel(
+            view_frame,
+            text = row[0],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 0, padx = (67, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[1],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 1, padx = (63, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[2],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 2, padx = (42, 60))
+        ctk.CTkLabel(
+            view_frame,
+            text = row[3],
+            font = ('Helvetica', 13, 'bold')
+        ).grid(row = int(row[0]), column = 3, padx = (62, 0))
+
+    sorting_frame = ctk.CTkFrame(
+        container2,
+        fg_color = 'transparent'
+    )
+    sorting_frame.pack(pady = 20)
+
+    notice1 = ctk.CTkLabel(
+        container2,
+        text = '',
+        text_color = 'Green',
+        font = ('Helvetica', 13, 'bold')
+    )
+
+    def sorting(choice):
+        if choice == 1:
+            notice1.configure(text = 'The list is sorted in ascending order.')
+        else:
+            notice1.configure(text = 'The list is sorted in descending order.')
+
+    asc_button = ctk.CTkButton(
+        sorting_frame,
+        text = 'Ascending',
+        text_color = 'black',
+        fg_color = '#84B6D9',
+        hover_color = '#82A4BA',
+        font = ('Helvetica', 15, 'bold'),
+        command = lambda: sorting(1)
+    )
+    asc_button.grid(row = 0, column = 0, padx = 5)
+
+    des_button = ctk.CTkButton(
+        sorting_frame,
+        text = 'Descending',
+        text_color = 'black',
+        fg_color = '#84B6D9',
+        hover_color = '#82A4BA',
+        font = ('Helvetica', 15, 'bold'),
+        command = lambda: sorting(2)
+    )
+    des_button.grid(row = 0, column = 1,padx = 5)
+
+    
+    notice1.pack(pady = 20)
 
 sort_button = ctk.CTkButton(
     inner_sidebar,
