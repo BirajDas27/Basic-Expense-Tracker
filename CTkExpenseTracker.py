@@ -1226,7 +1226,7 @@ def sort_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def sort():
-    title.configure(text = 'Sort expense')
+    title.configure(text='Sort expense')
 
     for widget in container2.winfo_children():
         widget.destroy()
@@ -1235,31 +1235,30 @@ def sort():
 
     notice = ctk.CTkLabel(
         container2,
-        text = tracker.msg,
-        text_color= 'red',
+        text=tracker.msg,
+        text_color='red',
         font=('Helvetica', 14, 'bold')
     )
 
     if tracker.msg == 'OK':
         notice.place_forget()
     else:
-        notice.pack(pady = (15, 0))
+        notice.pack(pady=(15, 0))
 
     if tracker.msg != 'OK':
         footer = ctk.CTkFrame(
             container2,
-            height = 5,
-            width = 300,
+            height=5,
+            width=300,
         )
-        footer.place(relx = 0.3, rely = 0.95)
+        footer.place(relx=0.3, rely=0.95)
         return
 
-    header = ctk.CTkFrame(
-            container2,
-            height = 55,
-            fg_color = '#84B6D9'
-        )
-    header.pack(padx = 10, pady = (20, 0), fill = 'x')
+    table = ctk.CTkFrame(container2, fg_color='transparent')
+    table.pack()
+
+    header = ctk.CTkFrame(table, height=70, fg_color='#84B6D9')
+    header.pack(padx=10, pady=(20, 0), fill='x')
 
     headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
     for i, text in enumerate(headings):
@@ -1270,81 +1269,83 @@ def sort():
             text_color='black',
             font=('Helvetica', 14, 'bold'),
             fg_color='transparent',
-        ).grid(row=0, column=i, padx=60)
-    view_frame = ctk.CTkScrollableFrame(
-        container2,
-        fg_color = 'white',
-        height =30
-    )
-    view_frame.pack(padx = (10, 10), pady=(0, 5), fill = 'both')
-    with open('expenses.csv', 'r') as file:
-        lines = file.readlines()
-    for line in lines:
-        row = line.strip().split(',')
-        ctk.CTkLabel(
-            view_frame,
-            text = row[0],
-            font = ('Helvetica', 13, 'bold')
-        ).grid(row = int(row[0]), column = 0, padx = (67, 60))
-        ctk.CTkLabel(
-            view_frame,
-            text = row[1],
-            font = ('Helvetica', 13, 'bold')
-        ).grid(row = int(row[0]), column = 1, padx = (63, 60))
-        ctk.CTkLabel(
-            view_frame,
-            text = row[2],
-            font = ('Helvetica', 13, 'bold')
-        ).grid(row = int(row[0]), column = 2, padx = (42, 60))
-        ctk.CTkLabel(
-            view_frame,
-            text = row[3],
-            font = ('Helvetica', 13, 'bold')
-        ).grid(row = int(row[0]), column = 3, padx = (62, 0))
+        ).grid(row=0, column=i, padx=60, pady = 7)
 
-    sorting_frame = ctk.CTkFrame(
-        container2,
-        fg_color = 'transparent'
-    )
-    sorting_frame.pack(pady = 20)
+    view_frame = ctk.CTkScrollableFrame(table, fg_color='white', height=150)
+    view_frame.pack(padx=(10, 10), pady=(0, 5), fill='both')
+
+    for i in range(4):
+        view_frame.grid_columnconfigure(i, weight=1, uniform='col')
+
+    with open('expenses.csv', 'r') as file:
+        lines = [line.strip().split(',') for line in file.readlines()]
+
+    def populate_table(data):
+        for widget in view_frame.winfo_children():
+            widget.destroy()
+
+        for idx, row in enumerate(data):
+            for j, value in enumerate(row):
+                ctk.CTkLabel(
+                    view_frame,
+                    text=value,
+                    font=('Helvetica', 13, 'bold'),
+                    justify='center'
+                ).grid(row=idx, column=j, sticky='nsew', pady=2)
+
+    populate_table(lines)
+
+    sorting_frame = ctk.CTkFrame(container2, fg_color='transparent')
+    sorting_frame.pack(pady=20)
 
     notice1 = ctk.CTkLabel(
         container2,
-        text = '',
-        text_color = 'Green',
-        font = ('Helvetica', 13, 'bold')
+        text='',
+        text_color='green',
+        font=('Helvetica', 13, 'bold')
     )
+    notice1.pack(pady=0)
 
     def sorting(choice):
-        if choice == 1:
-            notice1.configure(text = 'The list is sorted in ascending order.')
-        else:
-            notice1.configure(text = 'The list is sorted in descending order.')
+        if choice not in [1, 2]:
+            notice1.configure(text='Invalid choice.', text_color='red')
+            return
+
+        reverse = True if choice == 2 else False
+
+        try:
+            sorted_lines = sorted(lines, key=lambda x: float(x[3]), reverse=reverse)
+            for i, row in enumerate(sorted_lines, start=1):
+                row[0] = str(i)
+
+            populate_table(sorted_lines)
+
+            msg = 'Sorted in ascending order.' if not reverse else 'Sorted in descending order.'
+            notice1.configure(text=msg, text_color='green')
+        except Exception as e:
+            notice1.configure(text=f'Error while sorting: {e}', text_color='red')
 
     asc_button = ctk.CTkButton(
         sorting_frame,
-        text = 'Ascending',
-        text_color = 'black',
-        fg_color = '#84B6D9',
-        hover_color = '#82A4BA',
-        font = ('Helvetica', 15, 'bold'),
-        command = lambda: sorting(1)
+        text='Ascending',
+        text_color='black',
+        fg_color='#84B6D9',
+        hover_color='#82A4BA',
+        font=('Helvetica', 15, 'bold'),
+        command=lambda: sorting(1)
     )
-    asc_button.grid(row = 0, column = 0, padx = 5)
+    asc_button.grid(row=0, column=0, padx=5)
 
     des_button = ctk.CTkButton(
         sorting_frame,
-        text = 'Descending',
-        text_color = 'black',
-        fg_color = '#84B6D9',
-        hover_color = '#82A4BA',
-        font = ('Helvetica', 15, 'bold'),
-        command = lambda: sorting(2)
+        text='Descending',
+        text_color='black',
+        fg_color='#84B6D9',
+        hover_color='#82A4BA',
+        font=('Helvetica', 15, 'bold'),
+        command=lambda: sorting(2)
     )
-    des_button.grid(row = 0, column = 1,padx = 5)
-
-    
-    notice1.pack(pady = 20)
+    des_button.grid(row=0, column=1, padx=5)
 
 sort_button = ctk.CTkButton(
     inner_sidebar,
