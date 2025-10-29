@@ -107,21 +107,46 @@ class ExpenseTracker:
                 return
             else:
                 self.msg = 'OK'
-                # sorted = []
-                # for line in lines:
-                #     parts = line.strip().split(',')
-                #     idx, date, description, amount = parts
-                #     sorted.append([int(idx), date, description, float(amount)])
-                    
-                # opt = input('\nSort the amount(asce/desc): ').lower().strip()
-                # reverse = True if opt == 'desc' else False
-                # sorted.sort(key = lambda x: x[3], reverse = reverse)
+                
+    def periodic_expense(self):
+        if not os.path.exists('expenses.csv'):
+            self.msg = 'No file named expenses found in common directory.'
+            return
 
-                # for i, row in enumerate(sorted, start = 1):
-                #     row[0] = i
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            if len(lines) == 0:
+                self.msg = 'No expense found, list is empty.'
+                return
+            else: 
+                self.msg = 'OK'
+            # data = []
+            # total = 0
+            # headers = ['Index', 'Date', 'Description', 'Amount']
+            
+            # inp_year = input('Enter year(xxxx): ')
+            # inp_month = input('Enter month(xx): ')
 
-                # headers = ['Index', 'date', 'description', 'Amount']
-                # print(tabulate(sorted, headers = headers, tablefmt = 'grid'))
+            
+            # for line in lines:
+            #     parts = line.split(',')
+            #     idx, date, description, amount = parts
+            #     year, month, day = date.strip().split('-')
+
+            #     if (inp_year+'-'+inp_month) == (year+'-'+month):
+            #         data.append([idx, date, description, float(amount)])
+
+            # for i, row in enumerate(data, start = 1):
+            #     row[0] = i
+            #     total += row[3]
+            
+            # if not data:
+            #     print('\nNo expense info found for provided input.')
+            #     return
+                
+            # else:
+            #     print(tabulate(data, headers = headers, tablefmt='grid'))
+            #     print(f'Total expenditure: {total}')
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -1397,7 +1422,105 @@ def periodic_on_leave(event):
     hover_desc.configure(text = '', fg_color = 'transparent')
 
 def periodic():
-    title.configure(text = 'periodic button pressed')
+    title.configure(text = 'Periodic expense')
+
+    for widget in container2.winfo_children():
+        widget.destroy()
+
+    tracker.periodic_expense()
+
+    notice = ctk.CTkLabel(
+        container2,
+        text=tracker.msg,
+        text_color='red',
+        font=('Helvetica', 14, 'bold')
+    )
+
+    if tracker.msg == 'OK':
+        notice.place_forget()
+    else:
+        notice.pack(pady=(15, 0))
+
+    if tracker.msg != 'OK':
+        footer = ctk.CTkFrame(
+            container2,
+            height=5,
+            width=300,
+        )
+        footer.place(relx=0.3, rely=0.95)
+        return
+
+    years = []
+    with open('expenses.csv', 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            row = line.strip().split(',')
+            year = row[1].strip().split('-')
+            if year[0] in years:
+                continue
+            else:
+                years.append(int(year[0]))
+
+    year_value = ctk.StringVar(value = years[0])
+    month_value = ctk.StringVar(value="01")
+
+    def increase_year():
+        value = int(year_value.get())
+        value = years[0] if value == years[-1] else value + 1
+        year_value.set(f"{value:02d}")
+
+    def decrease_year():
+        value = int(year_value.get())
+        value = years[-1] if value == years[0] else value - 1
+        year_value.set(f"{value:02d}")
+
+    def increase_month():
+        value = int(month_value.get())
+        value = 1 if value == 12 else value + 1
+        month_value.set(f"{value:02d}")
+
+    def decrease_month():
+        value = int(month_value.get())
+        value = 12 if value == 1 else value - 1
+        month_value.set(f"{value:02d}")
+
+    year_month = ctk.CTkFrame(container2, fg_color = 'white', height = 40, width = 550)
+    year_month.pack(pady = 20)
+
+    year_frame = ctk.CTkFrame(year_month, height = 50, fg_color = '#84B6D9')
+    year_frame.grid(row = 0, column = 0, padx = (30, 10))
+    down_btn = ctk.CTkButton(
+        year_frame, text="▼",height = 30, width=40, command=decrease_year, fg_color="#2b6777", text_color="white"
+    )
+    down_btn.grid(row=0, column=0, padx=5)
+    year_label = ctk.CTkLabel(year_frame,height = 40, textvariable=year_value, font=("Helvetica", 22, "bold"), text_color = 'black')
+    year_label.grid(row=0, column=1, padx=10)
+    up_btn = ctk.CTkButton(
+        year_frame, text="▲",height = 30, width=40, command=increase_year, fg_color="#2b6777", text_color="white"
+    )
+    up_btn.grid(row=0, column=2, padx=5) 
+
+    month_frame = ctk.CTkFrame(year_month, height = 50, fg_color = '#84B6D9')
+    month_frame.grid(row = 0, column = 1, padx = (10, 30), pady=40)
+    down_btn = ctk.CTkButton(
+        month_frame, text="▼",height = 30, width=40, command=decrease_month, fg_color="#2b6777", text_color="white"
+    )
+    down_btn.grid(row=0, column=0, padx=5)
+    month_label = ctk.CTkLabel(month_frame,height = 40, textvariable=month_value, font=("Helvetica", 22, "bold"), text_color = 'black')
+    month_label.grid(row=0, column=1, padx=10)
+    up_btn = ctk.CTkButton(
+        month_frame, text="▲",height = 30, width=40, command=increase_month, fg_color="#2b6777", text_color="white"
+    )
+    up_btn.grid(row=0, column=2, padx=5)
+
+    year_label = ctk.CTkLabel(container2, text = '  Select year  ', font = ('Helvetica', 13, 'bold'), fg_color = 'transparent')
+    year_label.place(x = 261, y = 100)
+
+    month_label = ctk.CTkLabel(container2, text = '  Select month  ', font = ('Helvetica', 13, 'bold'), fg_color = 'transparent')
+    month_label.place(x = 433, y = 100)
+
+    submit_button = ctk.CTkButton(container2, text = 'SUBMIT', font = ('Helvetica', 14, 'bold'))
+    submit_button.pack(pady = 0)
 
 periodic_button = ctk.CTkButton(
     inner_sidebar,
