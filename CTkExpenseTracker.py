@@ -120,33 +120,6 @@ class ExpenseTracker:
                 return
             else: 
                 self.msg = 'OK'
-            # data = []
-            # total = 0
-            # headers = ['Index', 'Date', 'Description', 'Amount']
-            
-            # inp_year = input('Enter year(xxxx): ')
-            # inp_month = input('Enter month(xx): ')
-
-            
-            # for line in lines:
-            #     parts = line.split(',')
-            #     idx, date, description, amount = parts
-            #     year, month, day = date.strip().split('-')
-
-            #     if (inp_year+'-'+inp_month) == (year+'-'+month):
-            #         data.append([idx, date, description, float(amount)])
-
-            # for i, row in enumerate(data, start = 1):
-            #     row[0] = i
-            #     total += row[3]
-            
-            # if not data:
-            #     print('\nNo expense info found for provided input.')
-            #     return
-                
-            # else:
-            #     print(tabulate(data, headers = headers, tablefmt='grid'))
-            #     print(f'Total expenditure: {total}')
 
 navbar = ctk.CTkFrame(app,
     width = 900,
@@ -1402,6 +1375,13 @@ def sort():
     )
     des_button.grid(row=0, column=1, padx=5)
 
+    footer = ctk.CTkFrame(
+        container2,
+        height=5,
+        width=300,
+    )
+    footer.place(relx=0.3, rely=0.95)
+
 sort_button = ctk.CTkButton(
     inner_sidebar,
     image = sort_icon,
@@ -1502,6 +1482,7 @@ def periodic():
         given_month = month_value.get()
         found = False
         period_expenses = []
+        total = 0
 
         for widget in container2.winfo_children():
             if isinstance(widget, ctk.CTkFrame) and widget not in (year_month,):
@@ -1515,14 +1496,16 @@ def periodic():
                 if y == given_year and m == given_month:
                     found = True
                     period_expenses.append(line)
+                    total += float(row[3])
                 
         if found:
-            notice1.configure(text='Found your expenses.', text_color='green')
+            notice1.configure(text=f'Total spent in {given_year}-{given_month}: ₹{total}', text_color='black')
             table = ctk.CTkFrame(
                 container2,
-                fg_color = 'transparent'
+                fg_color = 'transparent',
+                height = 100
             )
-            table.pack(pady = 2, anchor = 'w', fill = 'x')
+            table.pack(pady = 2, anchor = 'w', fill = 'x', expand = False)
 
             header = ctk.CTkFrame(
                 table,
@@ -1548,10 +1531,9 @@ def periodic():
             view_frame = ctk.CTkScrollableFrame(
                 table,
                 fg_color='white',
-                height=150,
-                width = 550
+                height=50,
             )
-            view_frame.pack(padx=10, pady=(0, 5), fill='x', expand = True)
+            view_frame.pack(padx=10, pady=(0, 5), fill='x', expand = False)
 
             for i in range(4):
                 view_frame.grid_columnconfigure(i, weight = 1, uniform = 'col')
@@ -1625,6 +1607,13 @@ def periodic():
         font = ('Helvetica', 13, 'bold'),
     )
     notice1.pack(pady = (10, 0))
+
+    footer = ctk.CTkFrame(
+        container2,
+        height=5,
+        width=300,
+    )
+    footer.place(relx=0.3, rely=0.95)
 
 periodic_button = ctk.CTkButton(
     inner_sidebar,
