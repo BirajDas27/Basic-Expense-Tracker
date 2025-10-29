@@ -1141,6 +1141,9 @@ def search():
         )
         view_frame.pack(padx=10, pady=(0, 5), fill='both')
 
+        for i in range(4):
+            view_frame.grid_columnconfigure(i, weight = 1, uniform = 'col')
+
         with open('expenses.csv', 'r') as file:
             lines = file.readlines()
 
@@ -1158,22 +1161,22 @@ def search():
                 view_frame,
                 text = row[0],
                 font = ('Helvetica', 13, 'bold')
-            ).grid(row = int(row[0]), column = 0, padx = (57, 50))
+            ).grid(row = int(row[0]), column = 0, sticky = 'w', padx = (60, 0))
             ctk.CTkLabel(
                 view_frame,
                 text = row[1],
                 font = ('Helvetica', 13, 'bold')
-            ).grid(row = int(row[0]), column = 1, padx = (55, 30))
+            ).grid(row = int(row[0]), column = 1, sticky = 'nesw', padx = (5, 0))
             ctk.CTkLabel(
                 view_frame,
                 text = row[2],
                 font = ('Helvetica', 13, 'bold')
-            ).grid(row = int(row[0]), column = 2, padx = (55, 50))
+            ).grid(row = int(row[0]), column = 2, sticky = 'nesw', padx = (10, 0))
             ctk.CTkLabel(
                 view_frame,
                 text = row[3],
                 font = ('Helvetica', 13, 'bold')
-            ).grid(row = int(row[0]), column = 3, padx = (50, 0))
+            ).grid(row = int(row[0]), column = 3, sticky = 'nesw', padx = (20, 0))
 
         total_label.configure(text = f'Total spent:')
         total_amt.configure(text = f'₹ {total_cost}')
@@ -1451,28 +1454,38 @@ def periodic():
         return
 
     years = []
+    months = []
     with open('expenses.csv', 'r') as file:
         lines = file.readlines()
         for line in lines:
             row = line.strip().split(',')
-            year = row[1].strip().split('-')
-            if year[0] in years:
-                continue
-            else:
-                years.append(int(year[0]))
+            y, m, d = row[1].strip().split('-')
+
+            if y not in years:
+                years.append(y)
+            if m not in months:
+                months.append(m)
 
     year_value = ctk.StringVar(value = years[0])
-    month_value = ctk.StringVar(value="01")
+    month_value = ctk.StringVar(value= months[0])
 
     def increase_year():
-        value = int(year_value.get())
-        value = years[0] if value == years[-1] else value + 1
-        year_value.set(f"{value:02d}")
+        current_year = year_value.get()
+        if current_year in years:
+            idx = years.index(current_year)
+            next_idx = (idx + 1) % len(years)
+            year_value.set(years[next_idx])
+        else:
+            year_value.set(years[0])
 
     def decrease_year():
-        value = int(year_value.get())
-        value = years[-1] if value == years[0] else value - 1
-        year_value.set(f"{value:02d}")
+        current_year = year_value.get()
+        if current_year in years:
+            idx = years.index(current_year)
+            prev_idx = (idx - 1) % len(years)
+            year_value.set(years[prev_idx])
+        else:
+            year_value.set(years[-1])
 
     def increase_month():
         value = int(month_value.get())
@@ -1484,11 +1497,95 @@ def periodic():
         value = 12 if value == 1 else value - 1
         month_value.set(f"{value:02d}")
 
-    year_month = ctk.CTkFrame(container2, fg_color = 'white', height = 40, width = 550)
-    year_month.pack(pady = 20)
+    def availability():
+        given_year = year_value.get()
+        given_month = month_value.get()
+        found = False
+        period_expenses = []
+
+        for widget in container2.winfo_children():
+            if isinstance(widget, ctk.CTkFrame) and widget not in (year_month,):
+                widget.destroy()
+    
+        with open('expenses.csv', 'r') as file:
+            lines = file.readlines()
+            for line in lines:
+                row = line.strip().split(',')
+                y, m, d = row[1].strip().split('-')
+                if y == given_year and m == given_month:
+                    found = True
+                    period_expenses.append(line)
+                
+        if found:
+            notice1.configure(text='Found your expenses.', text_color='green')
+            table = ctk.CTkFrame(
+                container2,
+                fg_color = 'transparent'
+            )
+            table.pack(pady = 2, anchor = 'w', fill = 'x')
+
+            header = ctk.CTkFrame(
+                table,
+                height=55,
+                fg_color='#84B6D9'
+            )
+            header.pack(padx=10, pady=(0, 0), fill='x', expand = True)
+
+            headings = ['INDEX', 'DATE', 'DESCRIPTION', 'AMOUNT']
+            for i, text in enumerate(headings):
+                ctk.CTkLabel(
+                    header,
+                    text=text,
+                    justify='center',
+                    text_color='black',
+                    font=('Helvetica', 14, 'bold'),
+                    fg_color='transparent',
+                ).grid(row=0, column=i, sticky='nsew', pady=5)
+
+            for i in range(4):
+                header.grid_columnconfigure(i, weight=1, uniform='col')
+
+            view_frame = ctk.CTkScrollableFrame(
+                table,
+                fg_color='white',
+                height=150,
+                width = 550
+            )
+            view_frame.pack(padx=10, pady=(0, 5), fill='x', expand = True)
+
+            for i in range(4):
+                view_frame.grid_columnconfigure(i, weight = 1, uniform = 'col')
+
+            for line in period_expenses:
+                row = line.strip().split(',')
+                ctk.CTkLabel(
+                    view_frame,
+                    text = row[0],
+                    font = ('Helvetica', 13, 'bold')
+                ).grid(row = int(row[0]), column = 0, sticky = 'w', padx = (80, 0))
+                ctk.CTkLabel(
+                    view_frame,
+                    text = row[1],
+                    font = ('Helvetica', 13, 'bold')
+                ).grid(row = int(row[0]), column = 1, sticky = 'nesw', padx = (5, 0))
+                ctk.CTkLabel(
+                    view_frame,
+                    text = row[2],
+                    font = ('Helvetica', 13, 'bold')
+                ).grid(row = int(row[0]), column = 2, sticky = 'nesw', padx = (10, 0))
+                ctk.CTkLabel(
+                    view_frame,
+                    text = row[3],
+                    font = ('Helvetica', 13, 'bold')
+                ).grid(row = int(row[0]), column = 3, sticky = 'nesw', padx = (25, 0))
+        else:
+            notice1.configure(text='No expenses found in this period.', text_color='red')
+
+    year_month = ctk.CTkFrame(container2, fg_color = 'white', height = 30, width = 550)
+    year_month.pack(pady = (20, 10))
 
     year_frame = ctk.CTkFrame(year_month, height = 50, fg_color = '#84B6D9')
-    year_frame.grid(row = 0, column = 0, padx = (30, 10))
+    year_frame.grid(row = 0, column = 0, padx = (30, 10), pady = (20, 40))
     down_btn = ctk.CTkButton(
         year_frame, text="▼",height = 30, width=40, command=decrease_year, fg_color="#2b6777", text_color="white"
     )
@@ -1501,7 +1598,7 @@ def periodic():
     up_btn.grid(row=0, column=2, padx=5) 
 
     month_frame = ctk.CTkFrame(year_month, height = 50, fg_color = '#84B6D9')
-    month_frame.grid(row = 0, column = 1, padx = (10, 30), pady=40)
+    month_frame.grid(row = 0, column = 1, padx = (10, 30), pady = (20, 40))
     down_btn = ctk.CTkButton(
         month_frame, text="▼",height = 30, width=40, command=decrease_month, fg_color="#2b6777", text_color="white"
     )
@@ -1514,13 +1611,20 @@ def periodic():
     up_btn.grid(row=0, column=2, padx=5)
 
     year_label = ctk.CTkLabel(container2, text = '  Select year  ', font = ('Helvetica', 13, 'bold'), fg_color = 'transparent')
-    year_label.place(x = 261, y = 100)
+    year_label.place(x = 261, y = 80)
 
     month_label = ctk.CTkLabel(container2, text = '  Select month  ', font = ('Helvetica', 13, 'bold'), fg_color = 'transparent')
-    month_label.place(x = 433, y = 100)
+    month_label.place(x = 433, y = 80)
 
-    submit_button = ctk.CTkButton(container2, text = 'SUBMIT', font = ('Helvetica', 14, 'bold'))
+    submit_button = ctk.CTkButton(container2, text = 'SUBMIT', font = ('Helvetica', 14, 'bold'), command = availability)
     submit_button.pack(pady = 0)
+
+    notice1 = ctk.CTkLabel(
+        container2,
+        text = '',
+        font = ('Helvetica', 13, 'bold'),
+    )
+    notice1.pack(pady = (10, 0))
 
 periodic_button = ctk.CTkButton(
     inner_sidebar,
