@@ -81,7 +81,7 @@ customtkinter package - pip install customtkinter
 
 - All expenses are stored in a simple CSV file named expenses.csv
 - The file is created automatically if not present while adding an expense
-- Structure:<br>
+- Structure: (Headers not included in the actual file)<br>
 ![](screenshots/csv_structure.png)
 
 ---
@@ -90,7 +90,10 @@ customtkinter package - pip install customtkinter
 
 * Add new expenses
 * View all records
-* Search or delete entries
+* Change existing expenses
+* Search entries and total spent W.R.T. categories
+* Delete entries
+* Sort expenses based on amount spent
 * Check monthly totals
 
 ---
@@ -103,9 +106,10 @@ customtkinter package - pip install customtkinter
 
 🎯 Future Enhancements
 
+* 🪟 GUI version using customTkinter (✅ Completed)
+* 🧮 Add filtering by date & categories (✅ Completed)
 * 📊 Add category-wise expense charts
 * 💡 Introduce budget alerts and savings goals
-* 🪟 GUI version using Tkinter / PyQt
 * 📈 Generate monthly reports in Excel or PDF
 * ☁️ Cloud sync or database integration
 
