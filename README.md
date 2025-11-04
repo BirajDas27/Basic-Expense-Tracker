@@ -1,30 +1,35 @@
-# 💸 Expense Tracker System (Python)
+# 💰 Expense Tracker – CLI & GUI Application
 
-A **simple and efficient console-based Expense Tracker** built with Python.  
-Easily record, view, and manage your daily expenses while keeping your budget in check.  
-Perfect for beginners learning file handling and Python basics!
+Welcome to the Expense Tracker, a simple and efficient Python-based application to manage daily expenses.
+This project includes two ways to use the application:
+
+1️⃣ CLI Version – Run through terminal<br>
+2️⃣ GUI Version (CustomTkinter) – Modern and user-friendly UI
 
 ---
 
-## ✨ Features
+## 🧩 Features
 
-✅ **Add Expense** — Record date, description, and amount easily  
-📋 **View Expense** — Display all expenses in a clean table using `tabulate`  
-🔍 **Search Expense** — Find expenses by description keywords  
-🗑️ **Delete Expense** — Remove a specific record and auto-update indexes  
-💰 **Sort Expenses** — Sort records in ascending or descending order of amount  
-📆 **Monthly Totals** — View expenses for a selected month and year  
-💾 **CSV Data Storage** — All records are saved in `expenses.csv` for easy access  
+✅ CLI Version
+
+Add new expenses (date, description, amount)
+View all saved expenses in tabular format
+Automatically stores data in a CSV file (expenses.csv)
+Lightweight and fast
+
+✅ GUI Version
+
+Clean and modern UI using CustomTkinter
+Form-based expense entry
+Display feedback messages on UI
+Auto-save to expenses.csv
+Navigation through different sections (Add, View, etc.)  
 
 ---
 
 ## 📂 Project Structure
 
-ExpenseTracker/<br>
-│<br>
-├── expense_tracker.py # Main program file<br>
-├── expenses.csv # Stores all expense data<br>
-└── README.md # Project documentation<br>
+![](screenshots/project_structure.png)
 
 ---
 
