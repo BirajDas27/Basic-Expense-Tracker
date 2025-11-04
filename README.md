@@ -117,11 +117,15 @@ customtkinter package - pip install customtkinter
 ![](screenshots/GUI_home.png)
 
 - ⚒️ Features<br>
-+------------------------------+--------------------------------+-------------------------------+
-|  Add an expense              |   Table view                   |   Monthly total               |
-+------------------------------+--------------------------------+-------------------------------+
-|![](screenshots/GUI_add.png)  |![](screenshots/GUI_table.png)  |![](screenshots/GUI_month.png) |
-+------------------------------+--------------------------------+-------------------------------+
+
+- ➕ Add an expense<br>
+<img src="screenshots/GUI_home.png" width="220" height="150"/>
+- 📅 Table view<br>
+<img src="screenshots/GUI_add.png" width="220" height="150"/>
+- 🗓️ Monthly total<br>
+<img src="screenshots/GUI_month.png" width="220" height="150"/>
+
+---
 
 ## 🎯 Future Enhancements
 
