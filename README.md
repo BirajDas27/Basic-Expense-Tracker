@@ -98,13 +98,17 @@ customtkinter package - pip install customtkinter
 
 ---
 
-🌟 Example Output
+## 🌟 Some CLI screenshots
 
+- CLI menu<br>
+![](screenshots/CLI_menu.png)
+
+- Console table display<br>
 ![](screenshots/table_example.png)
 
 ---
 
-🎯 Future Enhancements
+## 🎯 Future Enhancements
 
 * 🪟 GUI version using customTkinter (✅ Completed)
 * 🧮 Add filtering by date & categories (✅ Completed)
@@ -115,10 +119,16 @@ customtkinter package - pip install customtkinter
 
 ---
 
-💬 About the Project
+## 💬 About the Project
 
 This project demonstrates:
 * Practical usage of Python fundamentals
 * Real-world file I/O operations
 * Designing modular and reusable code
 * A foundation for finance management apps
+
+---
+
+## 📄 MIT - License
+
+Open-source — for personal & academic use ✅
