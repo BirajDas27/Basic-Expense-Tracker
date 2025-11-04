@@ -3,7 +3,7 @@
 Welcome to the Expense Tracker, a simple and efficient Python-based application to manage daily expenses.
 This project includes two ways to use the application:
 
-1️⃣ CLI Version – Run through terminal
+1️⃣ CLI Version – Run through terminal< br>
 2️⃣ GUI Version (CustomTkinter) – Modern and user-friendly UI
 
 ---
