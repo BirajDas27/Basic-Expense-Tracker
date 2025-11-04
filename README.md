@@ -39,6 +39,7 @@ Navigation through different sections (Add, View, etc.)
 - 📊 **Tabulate Library** (for clean tabular display)
 - 🧱 **CSV File Handling**
 - 🧩 **OS Module** (for file management and checks)
+- 📲 **CustomTkinter** (for developing the UI)
 
 ---
 
@@ -49,6 +50,7 @@ Navigation through different sections (Add, View, etc.)
 - List and string manipulation
 - CLI-based user interaction
 - Basic data organization and filtering
+- Using CustomTkinter to develop a simple User Interface
 
 ---
 
@@ -63,13 +65,24 @@ Navigation through different sections (Add, View, etc.)
 
 ## 🧮 Run the program
 
-python expense_tracker.py
+1️⃣ To run the program in console/CLI: python expense_tracker.py<br>
+2️⃣ To run the Graphical Interface: python CTkExpenseTracker.py
 
 ---
 
 ## 📚 Packages
 
-Tabulate package - pip install tabulate
+Tabulate package - pip install tabulate<br>
+customtkinter package - pip install customtkinter
+
+---
+
+## 📌 How Data is Stored
+
+- All expenses are stored in a simple CSV file named expenses.csv
+- The file is created automatically if not present while adding an expense
+- Structure:<br>
+![](screenshots/csv_structure.png)
 
 ---
 
