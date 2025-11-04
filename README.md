@@ -106,6 +106,9 @@ customtkinter package - pip install customtkinter
 - Console table display<br>
 ![](screenshots/table_example.png)
 
+- Add feature<br>
+![](screenshots/CLI_add.png)
+
 ---
 
 ## 🎯 Future Enhancements
