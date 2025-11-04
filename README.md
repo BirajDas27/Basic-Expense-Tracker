@@ -100,10 +100,10 @@ customtkinter package - pip install customtkinter
 
 ## 🌟 Some CLI screenshots
 
--CLI menu<br>
+- CLI menu<br>
 ![](screenshots/CLI_menu.png)
 
--Console table display<br>
+- Console table display<br>
 ![](screenshots/table_example.png)
 
 ---
