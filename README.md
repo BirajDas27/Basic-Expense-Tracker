@@ -81,7 +81,7 @@ customtkinter package - pip install customtkinter
 
 - All expenses are stored in a simple CSV file named expenses.csv
 - The file is created automatically if not present while adding an expense
-- Structure:<br>
+- Structure: (Headers not included in the actual file)<br>
 ![](screenshots/csv_structure.png)
 
 ---
