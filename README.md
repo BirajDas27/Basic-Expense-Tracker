@@ -72,7 +72,7 @@ Navigation through different sections (Add, View, etc.)
 
 ## 📚 Packages
 
-Tabulate package - pip install tabulate
+Tabulate package - pip install tabulate<br>
 customtkinter package - pip install customtkinter
 
 ---
