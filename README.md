@@ -103,9 +103,10 @@ customtkinter package - pip install customtkinter
 
 🎯 Future Enhancements
 
+* 🪟 GUI version using customTkinter (✅ Completed)
+* 🧮 Add filtering by date & categories (✅ Completed)
 * 📊 Add category-wise expense charts
 * 💡 Introduce budget alerts and savings goals
-* 🪟 GUI version using Tkinter / PyQt
 * 📈 Generate monthly reports in Excel or PDF
 * ☁️ Cloud sync or database integration
 
