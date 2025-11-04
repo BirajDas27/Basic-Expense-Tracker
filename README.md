@@ -90,7 +90,10 @@ customtkinter package - pip install customtkinter
 
 * Add new expenses
 * View all records
-* Search or delete entries
+* Change existing expenses
+* Search entries and total spent W.R.T. categories
+* Delete entries
+* Sort expenses based on amount spent
 * Check monthly totals
 
 ---
