@@ -113,10 +113,11 @@ customtkinter package - pip install customtkinter
 
 ## 🌟 Some GUI screenshots
 
-- 🏠 Homepage<br>
+# 🏠 Homepage<br>
 <img src="screenshots/GUI_home.png" width="550" height="400"/>
 
-- ⚒️ Features<br>
+# ⚒️ Features<br>
+
 ➕ Add an expense<br>
 <img src="screenshots/GUI_home.png" width="450" height="350"/>
 📅 Table view<br>
